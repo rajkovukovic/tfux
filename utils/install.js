@@ -24,17 +24,17 @@ function installDependency(dependency, installTransitiveDependencies = true) {
     mkdirp.sync(TFUX_LIB_PATH);
   }
 
-  // // create tfux TMP path if not exists
-  // if (fs.existsSync(TMP_DIR)) {
-  //   rimraf.sync(TMP_DIR);
-  // }
-  // mkdirp.sync(TMP_DIR);
+  // create tfux TMP path if not exists
+  if (fs.existsSync(TMP_DIR)) {
+    rimraf.sync(TMP_DIR);
+  }
+  mkdirp.sync(TMP_DIR);
 
-  // // install dependency to TMP folder
-  // childProcess.execSync(`cd ${TMP_DIR} && npm init -y`);
-  // childProcess.execSync(`cd ${TMP_DIR} && npm install ${dependency} --save`, {
-  //   stdio: "inherit"
-  // });
+  // install dependency to TMP folder
+  childProcess.execSync(`cd ${TMP_DIR} && npm init -y`);
+  childProcess.execSync(`cd ${TMP_DIR} && npm install ${dependency} --save`, {
+    stdio: "inherit"
+  });
 
   // make dependencies tfux compatible and copy them to the tfux lib
   transformAndCopyModule(
@@ -84,7 +84,8 @@ function transformAndCopyModule(
         destinationPath,
         moduleName + "@" + dependencyVersions[moduleName]
       ),
-      path.join(nodeModulesPath, moduleName)
+      path.join(nodeModulesPath, moduleName),
+      moduleName
     );
   });
 }
