@@ -14,10 +14,7 @@ const { TFUX_LIB_PATH, TMP_DIR } = require("./constants");
  * @param {string} dependency name with optional version i.e. "lodash@1.0"
  * @param {boolean} installTransitiveDependencies
  */
-function installDependency(
-  dependency,
-  installTransitiveDependencies = true
-) {
+function installDependency(dependency, installTransitiveDependencies = true) {
   console.log(`installing "${dependency}"`);
   console.log({ TFUX_LIB_PATH, TMP_DIR });
   const [dependencyName, dependencyVersion] = dependency.split("@");
@@ -41,6 +38,7 @@ function installDependency(
 
   // make dependencies tfux compatible and copy them to the tfux lib
   transformAndCopyModule(
+    TFUX_LIB_PATH,
     TMP_DIR,
     installTransitiveDependencies ? null : dependencyName
   );
@@ -81,7 +79,13 @@ function transformAndCopyModule(
     ? [moduleName]
     : Object.keys(dependencyVersions);
   moduleToCopy.forEach(moduleName => {
-    transformToTfux(destinationPath, path.join(nodeModulesPath, moduleName));
+    transformToTfux(
+      path.join(
+        destinationPath,
+        moduleName + "@" + dependencyVersions[moduleName]
+      ),
+      path.join(nodeModulesPath, moduleName)
+    );
   });
 }
 

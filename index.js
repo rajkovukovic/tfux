@@ -2,7 +2,14 @@
 
 "use strict";
 
-const { installDependency } = require('./utils/install');
+const { installDependency } = require("./utils/install");
+const { generateTransformList } = require("./utils/generate-transform-list");
+
+// console.log(
+//   generateTransformList(
+//     "/private/var/folders/g2/783ym1bx5g9c50p5ddt49b280000gn/T/tfux/node_modules/js-tokens"
+//   )
+// );
 
 function main(command, args) {
   switch (command) {

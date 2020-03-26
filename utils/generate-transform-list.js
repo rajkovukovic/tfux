@@ -2,8 +2,9 @@
 
 const fs = require("fs");
 const path = require("path");
+const { JS_EXTENSIONS } = require("./constants");
 
-const jsExtensions = new Set(["js", "mjs"]);
+const jsExtensionsSet = new Set(JS_EXTENSIONS);
 
 /**
  *
@@ -19,14 +20,17 @@ function generateTransformList(modulePath) {
     const currentPath = pathList.shift();
     const files = fs.readdirSync(currentPath, "utf8");
     files.forEach(filename => {
-      const stat = fs.lstatSync(filename);
-      if (stat.isDirectory) {
-        pathList.push(filename);
+      const filePath = path.join(currentPath, filename);
+      const stat = fs.lstatSync(filePath);
+      if (stat.isDirectory()) {
+        pathList.push(filePath);
       } else if (stat.isFile) {
-        if (jsExtensions.has(path.extname())) {
-          jsFiles.push(file);
+        if (jsExtensionsSet.has(path.extname(filename).toLowerCase())) {
+          // push filePath without modulePath prefix
+          jsFiles.push(filePath.slice(modulePath.length + 1));
         } else {
-          restFiles.push(file);
+          // push filePath without modulePath prefix
+          restFiles.push(filePath.slice(modulePath.length + 1));
         }
       }
     });

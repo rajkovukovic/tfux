@@ -1,39 +1,47 @@
 "use strict";
 
+const path = require("path");
 const rollup = require("rollup");
 const resolve = require("@rollup/plugin-node-resolve");
 const commonjs = require("@rollup/plugin-commonjs");
 const typescript = require("rollup-plugin-typescript2");
 const typescriptCompiler = require("typescript");
 // const granularImports = require("../plugins/granular-imports/index.js").default;
-const { generateTransformList } = require('./generate-transform-list');
+const { generateTransformList } = require("./generate-transform-list");
+const { copyFiles } = require("./copy-files");
+const { JS_EXTENSIONS } = require("./constants");
 
 /**
- * 
- * @param {PathLike} destinationPath 
- * @param {PathLike} nodeModulesPath 
- * @param {string} moduleName 
+ *
+ * @param {PathLike} destinationPath
+ * @param {PathLike} modulePath
+ * @param {string} moduleName
  */
-async function transformToTfux(destinationPath, nodeModulesPath, moduleName) {
+async function transformToTfux(destinationPath, modulePath, moduleName) {
+  const { jsFiles, restFiles } = generateTransformList(modulePath);
 
-  const { jsFiles, restFiles } = generateTransformList(nodeModulesPath);
+  console.log({ jsFiles, restFiles });
+
+  copyFiles(modulePath, restFiles, destinationPath);
 
   const inputOptions = {
-    input: jsFiles,
+    input: jsFiles.map(jsFile => path.join(modulePath, jsFile)),
     plugins: [
-      resolve(),
+      // resolve(),
       commonjs({
         include: "*/**",
-        extensions: [".js", ".ts"]
+        extensions: JS_EXTENSIONS
       })
       // granularImports(),
     ]
   };
 
   const outputOptions = {
-    dir: path.join(destinationPath, moduleName),
+    dir: destinationPath,
     format: "esm"
   };
+
+  return;
 
   // create a bundle
   const bundle = await rollup.rollup(inputOptions);
@@ -51,7 +59,7 @@ async function transformToTfux(destinationPath, nodeModulesPath, moduleName) {
       //   source: string | Uint8Array    // the asset source
       //   type: 'asset'                  // signifies that this is an asset
       // }
-      console.log("Asset", chunkOrAsset);
+      // console.log("Asset", chunkOrAsset);
     } else {
       // For chunks, this contains
       // {
@@ -75,7 +83,7 @@ async function transformToTfux(destinationPath, nodeModulesPath, moduleName) {
       //   name: string                   // the name of this chunk as used in naming patterns
       //   type: 'chunk',                 // signifies that this is a chunk
       // }
-      console.log("Chunk", chunkOrAsset);
+      // console.log("Chunk", chunkOrAsset);
     }
   }
 
@@ -83,4 +91,4 @@ async function transformToTfux(destinationPath, nodeModulesPath, moduleName) {
   await bundle.write(outputOptions);
 }
 
-exports.transformToTfux;
+exports.transformToTfux = transformToTfux;
