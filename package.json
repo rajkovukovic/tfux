@@ -1,10 +1,10 @@
 {
-  "name": "tfux",
+  "name": "vatra",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "bin": {
-    "tfux": "./index.js"
+    "vatra": "./index.js"
   },
   "scripts": {
     "start": "node index.js",

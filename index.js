@@ -2,6 +2,7 @@
 
 "use strict";
 
+const { name } = require("./package.json");
 const { installDependency } = require("./utils/install");
 
 function main(command, args) {
@@ -13,9 +14,9 @@ function main(command, args) {
       break;
     default:
       if (!command) {
-        console.error(`tfux needs a command to run`);
+        console.error(`${name} needs a command to run`);
       } else {
-        console.error(`Unknown command "${command}"`);
+        console.error(`${name}: Unknown command "${command}"`);
       }
   }
 }

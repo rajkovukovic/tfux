@@ -5,9 +5,9 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const rimraf = require("rimraf");
 const childProcess = require("child_process");
-const { transformToTfux } = require("./transform");
+const { transformToVatra } = require("./transform");
 
-const { TFUX_LIB_PATH, TMP_DIR } = require("./constants");
+const { VATRA_LIB_PATH, TMP_DIR } = require("./constants");
 
 /**
  *
@@ -16,15 +16,15 @@ const { TFUX_LIB_PATH, TMP_DIR } = require("./constants");
  */
 function installDependency(dependency, installTransitiveDependencies = true) {
   console.log(`installing "${dependency}"`);
-  console.log({ TFUX_LIB_PATH, TMP_DIR });
+  console.log({ VATRA_LIB_PATH, TMP_DIR });
   const [dependencyName, dependencyVersion] = dependency.split("@");
 
-  // create tfux lib path if not exists
-  if (!fs.existsSync(TFUX_LIB_PATH)) {
-    mkdirp.sync(TFUX_LIB_PATH);
+  // create vatra lib path if not exists
+  if (!fs.existsSync(VATRA_LIB_PATH)) {
+    mkdirp.sync(VATRA_LIB_PATH);
   }
 
-  // create tfux TMP path if not exists
+  // create vatra TMP path if not exists
   if (fs.existsSync(TMP_DIR)) {
     rimraf.sync(TMP_DIR);
   }
@@ -36,9 +36,9 @@ function installDependency(dependency, installTransitiveDependencies = true) {
     stdio: "inherit"
   });
 
-  // make dependencies tfux compatible and copy them to the tfux lib
+  // make dependencies vatra compatible and copy them to the vatra lib
   transformAndCopyModule(
-    TFUX_LIB_PATH,
+    VATRA_LIB_PATH,
     TMP_DIR,
     installTransitiveDependencies ? null : dependencyName
   );
@@ -73,13 +73,13 @@ function transformAndCopyModule(
     {}
   );
 
-  // transforming and copying dependencies to tfux lib
+  // transforming and copying dependencies to vatrat lib
   console.log(dependencyVersions);
   const moduleToCopy = moduleName
     ? [moduleName]
     : Object.keys(dependencyVersions);
   moduleToCopy.forEach(moduleName => {
-    transformToTfux(
+    transformToVatra(
       path.join(
         destinationPath,
         moduleName + "@" + dependencyVersions[moduleName]

@@ -18,7 +18,7 @@ const { JS_EXTENSIONS } = require("./constants");
  * @param {PathLike} modulePath
  * @param {string} moduleName
  */
-async function transformToTfux(destinationPath, modulePath, moduleName) {
+async function transformToVatra(destinationPath, modulePath, moduleName) {
   const { jsFiles, restFiles } = generateTransformList(modulePath);
 
   console.log({ moduleName, jsFiles });
@@ -99,4 +99,4 @@ async function transformToTfux(destinationPath, modulePath, moduleName) {
   }
 }
 
-exports.transformToTfux = transformToTfux;
+exports.transformToVatra = transformToVatra;
