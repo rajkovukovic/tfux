@@ -12,12 +12,11 @@ function main(command, args) {
     case "install":
       installDependency(args[0], true);
       break;
+    case undefined:
+      console.error(`${name} needs a command to run ${command}`);
+      break;
     default:
-      if (!command) {
-        console.error(`${name} needs a command to run`);
-      } else {
-        console.error(`${name}: Unknown command "${command}"`);
-      }
+      console.error(`${name}: Unknown command "${command}"`);
   }
 }
 

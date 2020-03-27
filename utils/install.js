@@ -5,7 +5,7 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const rimraf = require("rimraf");
 const childProcess = require("child_process");
-const { transformToVatra } = require("./transform");
+const { transformModule } = require("./transform-module");
 
 const { VATRA_LIB_PATH, TMP_DIR } = require("./constants");
 
@@ -32,9 +32,12 @@ function installDependency(dependency, installTransitiveDependencies = true) {
 
   // install dependency to TMP folder
   childProcess.execSync(`cd ${TMP_DIR} && npm init -y`);
-  childProcess.execSync(`cd ${TMP_DIR} && npm install ${dependency} --save`, {
-    stdio: "inherit"
-  });
+  childProcess.execSync(
+    `cd ${TMP_DIR} && npm install ${dependency} --save --only=production`,
+    {
+      stdio: "inherit"
+    }
+  );
 
   // make dependencies vatra compatible and copy them to the vatra lib
   transformAndCopyModule(
@@ -79,13 +82,14 @@ function transformAndCopyModule(
     ? [moduleName]
     : Object.keys(dependencyVersions);
   moduleToCopy.forEach(moduleName => {
-    transformToVatra(
+    transformModule(
       path.join(
         destinationPath,
         moduleName + "@" + dependencyVersions[moduleName]
       ),
       path.join(nodeModulesPath, moduleName),
-      moduleName
+      moduleName,
+      dependencyVersions
     );
   });
 }
