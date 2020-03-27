@@ -10,11 +10,16 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Rajko Vukovic",
+  "author": {
+    "name": "Rajko Vukovic",
+    "email": "rajkovukovic@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "acorn": "^7.1.1",
+    "estree-walker": "^2.0.1",
     "mkdirp": "^1.0.3",
     "rimraf": "^3.0.2",
     "rollup": "^2.2.0",
