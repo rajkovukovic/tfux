@@ -3,14 +3,14 @@
 "use strict";
 
 const { name } = require("./package.json");
-const { installDependency } = require("./utils/install");
+const { install } = require("./utils/install");
 
 function main(command, args) {
   switch (command) {
     case "add":
     case "i":
     case "install":
-      installDependency(args[0], true);
+      install(args[0], true);
       break;
     case undefined:
       console.error(`${name} needs a command to run ${command}`);

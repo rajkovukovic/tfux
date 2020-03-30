@@ -8,7 +8,7 @@ const typescript = require("rollup-plugin-typescript2");
 const typescriptCompiler = require("typescript");
 const {
   granularImports
-} = require("../rollup-plugins/rollup-plugin-granular-imports");
+} = require("./rollup-plugins/rollup-plugin-granular-imports");
 
 /**
  *

@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { JS_EXTENSIONS } = require("./constants");
+const { JS_EXTENSIONS } = require("../constants");
 
 const jsExtensionsSet = new Set(JS_EXTENSIONS);
 

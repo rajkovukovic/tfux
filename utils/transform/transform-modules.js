@@ -5,9 +5,9 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const rimraf = require("rimraf");
 const childProcess = require("child_process");
-const { transformModule } = require("./transform-module");
+const { transformModule } = require("../transform-module");
 
-const { VATRA_LIB_PATH, TMP_DIR } = require("./constants");
+const { JSPM_BIN_PATH, VATRA_LIB_PATH, TMP_DIR } = require("../constants");
 
 /**
  *
@@ -33,11 +33,15 @@ function installDependency(dependency, installTransitiveDependencies = true) {
   // install dependency to TMP folder
   childProcess.execSync(`cd ${TMP_DIR} && npm init -y`);
   childProcess.execSync(
-    `cd ${TMP_DIR} && npm install ${dependency} --save --only=production`,
+    `cd ${TMP_DIR} && ${JSPM_BIN_PATH} install ${dependency}`,
     {
       stdio: "inherit"
     }
   );
+
+  console.log({ TMP_DIR });
+
+  return;
 
   // make dependencies vatra compatible and copy them to the vatra lib
   transformAndCopyModule(
@@ -52,23 +56,25 @@ function installDependency(dependency, installTransitiveDependencies = true) {
  * @param {PathLike} destinationPath - a path where dependencies should be copied to
  * @param {PathLike} modulePath - a path where dependencies are installed
  * @param {string} moduleName to be copied, if falsy,
- * all dependencies defined by package.lock will be copied
+ * all dependencies defined by jspm.json,
+ * or package.lock in case npm is used to install deps,
+ * will be copied
  */
 function transformAndCopyModule(
   destinationPath,
   modulePath,
   moduleName = null
 ) {
-  const packageLockPath = path.join(modulePath, "package-lock.json");
-  const nodeModulesPath = path.join(modulePath, "node_modules");
-  if (!fs.existsSync(packageLockPath)) {
-    throw new Error(`can not find "package-lock.json" on path "${modulePath}"`);
+  const jspmJSONPath = path.join(modulePath, "jspm.json");
+  const modulesPath = path.join(modulePath, "jspm_packages");
+  if (!fs.existsSync(jspmJSONPath)) {
+    throw new Error(`can not find "jspm.json" on path "${modulePath}"`);
   }
-  if (!fs.existsSync(packageLockPath)) {
-    throw new Error(`can not find "node_modules" on path "${dependencyPath}"`);
+  if (!fs.existsSync(jspmJSONPath)) {
+    throw new Error(`can not find "jspm_package" on path "${dependencyPath}"`);
   }
-  const packageLock = require(packageLockPath);
-  const dependencyVersions = Object.entries(packageLock.dependencies).reduce(
+  const jspmJSON = require(jspmJSONPath);
+  const dependencyVersions = Object.entries(jspmJSON.dependencies).reduce(
     (acc, [moduleName, dependencyInfo]) => {
       acc[moduleName] = dependencyInfo.version;
       return acc;
@@ -76,7 +82,7 @@ function transformAndCopyModule(
     {}
   );
 
-  // transforming and copying dependencies to vatrat lib
+  // transforming and copying dependencies to vatra lib
   console.log(dependencyVersions);
   const moduleToCopy = moduleName
     ? [moduleName]
@@ -87,7 +93,7 @@ function transformAndCopyModule(
         destinationPath,
         moduleName + "@" + dependencyVersions[moduleName]
       ),
-      path.join(nodeModulesPath, moduleName),
+      path.join(modulesPath, moduleName),
       moduleName,
       dependencyVersions
     );
