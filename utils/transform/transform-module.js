@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require("fs");
 const path = require("path");
 const { generateTransformList } = require("./generate-transform-list");
 const { copyFiles } = require("../filesystem/copy-files");
@@ -16,8 +17,10 @@ async function transformModule(
   modulesDestinationPath,
   installedModulesPath,
   moduleInfo,
-  dependencyMap
+  dependencyMap,
+  force = true
 ) {
+
   const modulePath = path.join(
     installedModulesPath,
     moduleInfo.group || "npm",
@@ -26,37 +29,38 @@ async function transformModule(
 
   const destinationPath = path.join(
     modulesDestinationPath,
-    `${moduleInfo.group || "npm"}.${moduleInfo.name}@${moduleInfo.version}`
+    moduleInfo.libDirectoryName
   );
 
-  console.log({
-    modulePath,
-    destinationPath,
-    moduleInfo
-  });
-  return;
+  // if already exists in destination path do not install again
+  // except if force is true
+  if (force || !fs.existsSync(destinationPath)) {
+    const { jsFiles, restFiles } = generateTransformList(modulePath);
 
-  const { jsFiles, restFiles } = generateTransformList(modulePath);
+    copyFiles(modulePath, restFiles, destinationPath);
 
-  console.log({
-    modulePath,
-    destinationPath,
-    jsFiles: jsFiles.length,
-    restFiles: restFiles.length
-  });
+    // if no dependencies there are no imports to replace in js files
+    if (!moduleInfo.dependencies) {
+      copyFiles(modulePath, jsFiles, destinationPath);
+    } else {
+      console.log({
+        modulePath,
+        destinationPath,
+        jsFiles: jsFiles.length,
+        restFiles: restFiles.length
+      });
 
-  // console.log(`transforming module "${aModule}"`);
-
-  // copyFiles(modulePath, restFiles, destinationPath);
-
-  // for (let jsFile of jsFiles) {
-  //   await transformJsFile({
-  //     destinationPath,
-  //     modulePath,
-  //     jsFile,
-  //     dependencyMap
-  //   });
-  // }
+      for (let jsFile of jsFiles) {
+        await transformJsFile({
+          destinationPath,
+          modulePath,
+          moduleInfo,
+          jsFile,
+          dependencyMap
+        });
+      }
+    }
+  }
 }
 
 exports.transformModule = transformModule;

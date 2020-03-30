@@ -32,6 +32,7 @@ function calcDependencyDepth(jspmJSON) {
       group,
       name,
       version,
+      libDirectoryName: `${group || "npm"}.${name}@${version}`,
       dependencies: info.resolve ? Object.values(info.resolve) : null,
       nestedDependencyLevel: null
     });
@@ -39,6 +40,11 @@ function calcDependencyDepth(jspmJSON) {
   Array.from(dependencyMap.keys()).forEach(dependencyName =>
     calcOneDependencyDepth(dependencyMap, dependencyName)
   );
+  // // use moduleInfo.name as key instead of moduleInfo.fullName
+  // return Array.from(dependencyMap.entries()).map(([_, moduleInfo]) => [
+  //   moduleInfo.name,
+  //   moduleInfo
+  // ]);
   return dependencyMap;
 }
 
