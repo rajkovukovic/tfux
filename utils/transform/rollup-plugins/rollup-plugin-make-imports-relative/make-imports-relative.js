@@ -18,11 +18,10 @@ function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
     resolveId(lib) {
       let libPath;
       let libName;
+      let isNodeInternalLib = false;
 
       try {
         if (options.input.indexOf(lib) === -1 && isGlobalModule(lib)) {
-          console.log("resolveId", lib, "dependencyMap: ", !!dependencyMap);
-
           libPath = lib.split("/");
 
           libName = libPath.shift();
@@ -43,25 +42,36 @@ function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
                 }) || null
               : null;
 
-          const libInfo = libMapKey ? dependencyMap.get(libMapKey) : null;
+          let libInfo = libMapKey ? dependencyMap.get(libMapKey) : null;
+
+          if (!libInfo) {
+            const nodeInternalLibs = dependencyMap.get("node");
+            isNodeInternalLib = true;
+            libInfo = nodeInternalLibs.get(libName);
+          }
 
           if (!libInfo) {
             if (!libName) debugger;
             throw new Error(
               Boolean(libMapKey)
                 ? `dependencyMap does not have "${libMapKey}" lib. Can not resolve.`
-                : `can not find "${libName ? libName : `lib: ${lib}`}" in "${currentModule.fullName}" module's dependencies`
+                : `can not find "${libName ? libName : `lib: ${lib}`}" in "${
+                    currentModule.fullName
+                  }" module's dependencies`
             );
           }
 
           let nextSource = path.join(
             importPrefix,
             `${libInfo.libDirectoryName}${libPath ? "/" + libPath : ""}${
-              libPath ? "" : "/index.js"
+              libPath || isNodeInternalLib ? "" : "/index.js"
             }`
           );
 
-          // console.log("resolveId replacing", source, nextSource);
+          console.log("resolveId replacing", {
+            lib,
+            nextSource,
+          });
           return { id: nextSource, external: true };
         }
         // console.log("resolveId", source);
