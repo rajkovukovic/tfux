@@ -1,7 +1,7 @@
 "use strict";
 
 const { generateTransformList } = require("./generate-transform-list");
-const { copyFiles } = require("./copy-files");
+const { copyFiles } = require("../filesystem/copy-files");
 const { transformFile } = require("./transform-file");
 
 /**

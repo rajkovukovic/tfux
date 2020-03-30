@@ -2,7 +2,8 @@
 
 const fs = require("fs");
 const path = require("path");
-const { transformModule } = require("../transform-module");
+const { transformModule } = require("./transform-module");
+const { calcDependencyDepth } = require("../tools/jspm-dependency-depth");;
 
 /**
  *
@@ -22,7 +23,12 @@ function transformAndCopyModules(
     throw new Error(`can not find "jspm_package" on path "${dependencyPath}"`);
   }
   const jspmJSON = require(jspmJSONPath);
-  const dependencyVersions = Object.entries(jspmJSON.dependencies).reduce(
+  
+  let dependencyVersions = calcDependencyDepth(jspmJSON);
+  console.log({ dependencyVersions });
+  
+  return;
+  dependencyVersions = Object.entries(jspmJSON.dependencies).reduce(
     (acc, [moduleName, dependencyInfo]) => {
       acc[moduleName] = dependencyInfo.version;
       return acc;

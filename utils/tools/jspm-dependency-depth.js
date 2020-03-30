@@ -13,33 +13,32 @@ function calcOneDependencyDepth(dependencyMap, dependencyName) {
   if (!dependency.dependencies) {
     dependency.nestedDependencyLevel = 0;
   } else {
-    dependency.nestedDependencyLevel = Math.max(
-      ...(dependency.dependencies.map(depName =>
-        calcOneDependencyDepth(dependencyMap, depName)
-      ) + 1)
-    );
+    dependency.nestedDependencyLevel =
+      Math.max(
+        ...dependency.dependencies.map(depName =>
+          calcOneDependencyDepth(dependencyMap, depName)
+        )
+      ) + 1;
   }
   return dependency.nestedDependencyLevel;
 }
 
 function calcDependencyDepth(jspmJSON) {
-  const deps = new Map();
+  const dependencyMap = new Map();
   Object.entries(jspmJSON.dependencies).forEach(([fullName, info]) => {
     const [group, name, version] = parseJspmJSONDependency(fullName);
-    deps.set(fullName, {
+    dependencyMap.set(fullName, {
       fullName,
       group,
       name,
       version,
-      dependencies: info.resolve ? Object.entries(info.resolve) : null
+      dependencies: info.resolve ? Object.values(info.resolve) : null
     });
   });
-  deps
-    .keys()
-    .forEach(dependencyName =>
-      calcOneDependencyDepth(dependencyMap, dependencyName)
-    );
-  return deps;
+  Array.from(dependencyMap.keys()).forEach(dependencyName =>
+    calcOneDependencyDepth(dependencyMap, dependencyName)
+  );
+  return dependencyMap;
 }
 
 exports.calcDependencyDepth = calcDependencyDepth;

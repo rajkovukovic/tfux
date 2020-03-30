@@ -3,7 +3,7 @@
 "use strict";
 
 const { name } = require("./package.json");
-const { install } = require("./utils/install");
+const { install } = require("./utils/install/install");
 
 function main(command, args) {
   switch (command) {

@@ -31,7 +31,7 @@ function installDependenciesToTempPath(dependencies) {
   // install dependency to TMP folder
   childProcess.execSync(`cd ${TMP_DIR} && npm init -y`);
   childProcess.execSync(
-    `cd ${TMP_DIR} && ${JSPM_BIN_PATH} install ${dependency}`,
+    `cd ${TMP_DIR} && ${JSPM_BIN_PATH} install ${dependencies.join(" ")}`,
     {
       stdio: "inherit"
     }

@@ -1,8 +1,7 @@
 function parseJspmJSONDependency(fullDependencyName) {
-  "npm:@jspm/core@1.0.4";
   const splitAtAt = fullDependencyName.split("@");
   const version = splitAtAt.pop();
-  const splitAtColon = splitAtAt.join("@");
+  const splitAtColon = splitAtAt.join("@").split(":");
   const name = splitAtColon.pop();
   if (splitAtColon.length > 1) {
     throw new Error(
