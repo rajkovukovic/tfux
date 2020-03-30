@@ -17,7 +17,7 @@ const {
  * @param {string} jsFile
  * @param {HashMap<string, string>} dependencyVersions
  */
-async function transformFile({
+async function transformJsFile({
   destinationPath,
   modulePath,
   jsFile,
@@ -90,4 +90,4 @@ async function transformFile({
   await bundle.write(outputOptions);
 }
 
-exports.transformFile = transformFile;
+exports.transformJsFile = transformJsFile;

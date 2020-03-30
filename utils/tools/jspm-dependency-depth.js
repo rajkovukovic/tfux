@@ -32,7 +32,8 @@ function calcDependencyDepth(jspmJSON) {
       group,
       name,
       version,
-      dependencies: info.resolve ? Object.values(info.resolve) : null
+      dependencies: info.resolve ? Object.values(info.resolve) : null,
+      nestedDependencyLevel: null
     });
   });
   Array.from(dependencyMap.keys()).forEach(dependencyName =>

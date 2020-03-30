@@ -1,36 +1,62 @@
 "use strict";
 
+const path = require("path");
 const { generateTransformList } = require("./generate-transform-list");
 const { copyFiles } = require("../filesystem/copy-files");
-const { transformFile } = require("./transform-file");
+const { transformJsFile } = require("./transform-js-file");
 
 /**
  *
- * @param {PathLike} destinationPath
- * @param {PathLike} modulePath
- * @param {string} moduleName
- * @param {HashMap<string, string>} dependencyVersions
+ * @param {PathLike} modulesDestinationPath
+ * @param {PathLike} installedModulesPath
+ * @param {string} aModule
+ * @param {HashMap<string, ModuleInfo>} dependencyMap
  */
 async function transformModule(
-  destinationPath,
-  modulePath,
-  moduleName,
-  dependencyVersions
+  modulesDestinationPath,
+  installedModulesPath,
+  moduleInfo,
+  dependencyMap
 ) {
+  const modulePath = path.join(
+    installedModulesPath,
+    moduleInfo.group || "npm",
+    `${moduleInfo.name}@${moduleInfo.version}`
+  );
+
+  const destinationPath = path.join(
+    modulesDestinationPath,
+    `${moduleInfo.group || "npm"}.${moduleInfo.name}@${moduleInfo.version}`
+  );
+
+  console.log({
+    modulePath,
+    destinationPath,
+    moduleInfo
+  });
+  return;
+
   const { jsFiles, restFiles } = generateTransformList(modulePath);
 
-  console.log(`transforming module "${moduleName}"`);
+  console.log({
+    modulePath,
+    destinationPath,
+    jsFiles: jsFiles.length,
+    restFiles: restFiles.length
+  });
 
-  copyFiles(modulePath, restFiles, destinationPath);
+  // console.log(`transforming module "${aModule}"`);
 
-  for (let jsFile of jsFiles) {
-    await transformFile({
-      destinationPath,
-      modulePath,
-      jsFile,
-      dependencyVersions
-    });
-  }
+  // copyFiles(modulePath, restFiles, destinationPath);
+
+  // for (let jsFile of jsFiles) {
+  //   await transformJsFile({
+  //     destinationPath,
+  //     modulePath,
+  //     jsFile,
+  //     dependencyMap
+  //   });
+  // }
 }
 
 exports.transformModule = transformModule;
