@@ -4,6 +4,7 @@ const { getPomVersionFormat } = require("../utils/versions/versions");
 const { getPomRange } = require("../utils/versions/versions");
 
 const testData = [
+    { data: [{ max: '1.3.3', min: '1.2.7' }], expected: ['[1.2.7, 1.3.3)'] },
     { data: [{ max: '1.3.0', min: '1.2.7' }, { max: '1.3.3', min: '1.2.7' }], expected: ['[1.2.7, 1.3.0)'] },
     { data: [{ max: '1.3.0', min: '1.2.7' }, { max: '1.3.3', min: '1.2.7' }, { max: '1.4.3', min: '1.2.0' }], expected: ['[1.2.7, 1.3.0)'] },
     { data: [{ max: '1.3.0', min: '1.2.7' }, { max: '1.3.3', min: '1.2.7' }, { max: '1.4.3', min: '1.3.0' }], expected: ['[1.3.0, 1.3.0)'] },

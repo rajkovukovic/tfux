@@ -2,6 +2,7 @@
 const semver = require('semver');
 
 function getPomVersionFormat(arr, resolved) {
+    if (arr.length == 1) return [`[${arr[0].min}, ${arr[0].max})`];
     let range = {}
     const outOf = [];
     let resp = [];
