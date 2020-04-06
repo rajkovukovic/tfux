@@ -1,11 +1,17 @@
 "use strict";
 
-const { VATRA_LIB_PATH, TMP_DIR } = require("../constants/constants.js");
+const {
+  CLI_TOOL_NAME,
+  ENGINE_TYPES,
+  VATRA_LIB_PATH,
+  TMP_DIR,
+} = require("../constants/constants.js");
 const { JspmEngine } = require("../engines/jspm/jspm.js");
+const { NpmEngine } = require("../engines/npm/npm.js");
 
 const engineFactories = {
-  jspm: JspmEngine,
-  // npm: NpmEngine, // needs to be implemented if JSPM can not handle all the tasks
+  [ENGINE_TYPES.jspm]: JspmEngine,
+  [ENGINE_TYPES.npm]: NpmEngine,
 };
 
 async function install(engineName, dependencyOrDependencies) {
@@ -23,11 +29,13 @@ async function install(engineName, dependencyOrDependencies) {
 
   const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR);
 
-  console.log(`vatra is installing ${JSON.stringify(dependencyArray)}`);
+  console.log(
+    `${CLI_TOOL_NAME} is installing ${JSON.stringify(dependencyArray)}`
+  );
 
   try {
     // install dependency to TMP folder
-    await engine.installDependencies(dependencyArray);
+    await engine.installDependencies(dependencyArray, true);
 
     // make dependencies vatra compatible and copy them to the vatra lib
     await engine.transformAndCopyModules();

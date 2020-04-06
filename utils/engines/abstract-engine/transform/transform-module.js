@@ -19,9 +19,9 @@ const { copyFiles } = require("../../../filesystem/copy-files.js");
  */
 async function transformModule(moduleInfo, dependencyMap, force = true) {
   const engine = this;
+
   const modulePath = path.join(
     engine.installedModulesPath,
-    "jspm_packages",
     moduleInfo.relativeInstallPath
   );
 

@@ -11,16 +11,12 @@ const {
  */
 function transformAndCopyModules() {
   const engine = this;
-  const { installedModulesPath } = engine;
-  const jspmJSONPath = path.join(installedModulesPath, "jspm.json");
-  const modulesPath = path.join(installedModulesPath, "jspm_packages");
-  if (!fs.existsSync(jspmJSONPath)) {
-    throw new Error(`can not find "jspm.json" on path "${modulesPath}"`);
+
+  const { installedModulesPath, jspmJSON } = engine;
+
+  if (!fs.existsSync(installedModulesPath)) {
+    throw new Error(`can not find "jspm_packages" on path "${installedModulesPath}"`);
   }
-  if (!fs.existsSync(jspmJSONPath)) {
-    throw new Error(`can not find "jspm_package" on path "${dependencyPath}"`);
-  }
-  const jspmJSON = require(jspmJSONPath);
 
   const modulesMap = calcDependencyDepth(jspmJSON);
 
@@ -31,7 +27,7 @@ function transformAndCopyModules() {
   modulesMap.set("node", nodeInternalModulesMap);
 
   fs.readdirSync(
-    path.join(modulesPath, "npm/@jspm/core@1.0.4/nodelibs"),
+    path.join(installedModulesPath, "npm/@jspm/core@1.0.4/nodelibs"),
     "utf8"
   )
     .filter((filename) => path.extname(filename) === ".js")

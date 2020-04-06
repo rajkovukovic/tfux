@@ -10,8 +10,9 @@ const { transformJsFile } = require("./transform-js-file");
  *
  * @param {PathLike} modulesDestinationPath
  * @param {PathLike} installedModulesPath
- * @param {string} aModule
+ * @param {ModuleInfo} moduleInfo
  * @param {HashMap<string, ModuleInfo>} dependencyMap
+ * @param {boolean} force
  */
 async function transformModule(
   modulesDestinationPath,

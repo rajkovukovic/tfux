@@ -2,21 +2,21 @@
 
 "use strict";
 
-const { name } = require("./package.json");
 const { install } = require("./utils/install/install.js");
+const { CLI_TOOL_NAME, ENGINE_TYPES } = require("./utils/constants/constants.js");
 
 function main(command, args) {
   switch (command) {
     case "add":
     case "i":
     case "install":
-      install("jspm", args[0]);
+      install(ENGINE_TYPES.jspm, args[0]);
       break;
     case undefined:
-      console.error(`${name} needs a command to run`);
+      console.error(`${CLI_TOOL_NAME} needs a command to run`);
       break;
     default:
-      console.error(`${name}: Unknown command "${command}"`);
+      console.error(`${CLI_TOOL_NAME}: Unknown command "${command}"`);
   }
 }
 
