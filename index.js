@@ -3,17 +3,17 @@
 "use strict";
 
 const { name } = require("./package.json");
-const { install } = require("./utils/install/install");
+const { install } = require("./utils/install/install.js");
 
 function main(command, args) {
   switch (command) {
     case "add":
     case "i":
     case "install":
-      install(args[0], true);
+      install("jspm", args[0]);
       break;
     case undefined:
-      console.error(`${name} needs a command to run ${command}`);
+      console.error(`${name} needs a command to run`);
       break;
     default:
       console.error(`${name}: Unknown command "${command}"`);

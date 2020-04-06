@@ -1,3 +1,5 @@
+"use strict";
+
 function parseJspmJSONDependency(fullDependencyName) {
   const splitAtAt = fullDependencyName.split("@");
   const version = splitAtAt.pop();

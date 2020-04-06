@@ -1,3 +1,5 @@
+"use strict";
+
 const { parseJspmJSONDependency } = require("./parse-jspm");
 
 function calcOneDependencyDepth(dependencyMap, dependencyName) {
