@@ -2,12 +2,19 @@
 
 const path = require("path");
 
+const modulesToSkip = new Set(["fs", "module"]);
+
 function isGlobalModule(path) {
   if (!path) return false;
   return /[a-zA-Z0-9@]/.test(path[0]);
 }
 
-function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependencyMap }) {
+function makeImportsRelative({
+  inputFilePath,
+  moduleInfo,
+  importPrefix,
+  dependencyMap,
+}) {
   let options = null;
   return {
     name: "granular-imports",
@@ -16,6 +23,10 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
       // console.log("options", options);
     },
     resolveId(lib) {
+      if (modulesToSkip.has(lib)) {
+        return { id: lib, external: true };
+      }
+
       let libPath;
       let libName;
       let isNodeInternalLib = false;
@@ -36,7 +47,7 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
 
           const libMapKey =
             moduleInfo && moduleInfo.dependencies
-              ? moduleInfo.dependencies.find(dependencyFullName => {
+              ? moduleInfo.dependencies.find((dependencyFullName) => {
                   const key = dependencyMap.get(dependencyFullName);
                   return key && key.name === libName;
                 }) || null
@@ -51,13 +62,12 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
           }
 
           if (!libInfo) {
-            if (!libName) debugger;
             throw new Error(
               Boolean(libMapKey)
                 ? `dependencyMap does not have "${libMapKey}" lib. Can not resolve.`
-                : `In file "${inputFilePath}": can not find "${libName ? libName : `lib: ${lib}`}" in "${
-                    moduleInfo.fullName
-                  }" module's dependencies`
+                : `In file "${inputFilePath}": can not find "${
+                    libName ? libName : `lib: ${lib}`
+                  }" in "${moduleInfo.fullName}" module's dependencies`
             );
           }
 
@@ -68,10 +78,10 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
             }`
           );
 
-          console.log("resolveId replacing", {
-            lib,
-            nextSource,
-          });
+          // console.log("make-imports-relative replacing", {
+          //   lib,
+          //   nex: nextSource,
+          // });
           return { id: nextSource, external: true };
         }
         return null;
@@ -79,7 +89,7 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
         console.error("makeImportsRelative -> resolveId", error);
         return { id: libName, external: true };
       }
-    }
+    },
   };
 }
 

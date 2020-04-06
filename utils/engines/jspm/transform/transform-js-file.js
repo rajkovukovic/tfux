@@ -2,6 +2,7 @@
 
 const path = require("path");
 const rollup = require("rollup");
+const preserveHashBang = require("rollup-plugin-hashbang");
 const {
   makeImportsRelative,
 } = require("../../../rollup-plugins/rollup-plugin-make-imports-relative/make-imports-relative");
@@ -33,6 +34,7 @@ async function transformJsFile({
   const inputOptions = {
     input: inputFilePath,
     plugins: [
+      preserveHashBang(),
       makeImportsRelative({
         inputFilePath,
         moduleInfo,
