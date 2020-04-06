@@ -29,22 +29,12 @@ async function transformJsFile({
   );
 
   const inputFilePath = path.join(modulePath, jsFile);
-  const importPrefix = path.relative(
-    inputFilePath,
-    engine.installedModulesPath
-  );
-  console.log({
-    destinationDir,
-    moduleInfo,
-    installedModulesPath: engine.installedModulesPath,
-    inputFilePath,
-    importPrefix,
-  });
 
   const inputOptions = {
     input: inputFilePath,
     plugins: [
       makeImportsRelative({
+        inputFilePath,
         moduleInfo,
         importPrefix: path.relative(inputFilePath, modulePath),
         dependencyMap,
@@ -69,7 +59,7 @@ async function transformJsFile({
     // or write the bundle to disk
     await bundle.write(outputOptions);
   } catch (error) {
-    console.error("transformJsFile", error);
+    console.error("\x1b[31m", "transformJsFile", error);
   }
 }
 

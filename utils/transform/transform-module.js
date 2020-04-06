@@ -43,12 +43,12 @@ async function transformModule(
     if (!moduleInfo.dependencies) {
       copyFiles(modulePath, jsFiles, destinationPath);
     } else {
-      console.log({
-        modulePath,
-        destinationPath,
-        jsFiles: jsFiles.length,
-        restFiles: restFiles.length
-      });
+      // console.log({
+      //   modulePath,
+      //   destinationPath,
+      //   jsFiles: jsFiles.length,
+      //   restFiles: restFiles.length
+      // });
 
       for (let jsFile of jsFiles) {
         await transformJsFile({

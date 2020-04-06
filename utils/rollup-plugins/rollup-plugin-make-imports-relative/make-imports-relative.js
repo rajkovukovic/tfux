@@ -7,7 +7,7 @@ function isGlobalModule(path) {
   return /[a-zA-Z0-9@]/.test(path[0]);
 }
 
-function makeImportsRelative({ moduleInfo, importPrefix, dependencyMap }) {
+function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependencyMap }) {
   let options = null;
   return {
     name: "granular-imports",
@@ -55,7 +55,7 @@ function makeImportsRelative({ moduleInfo, importPrefix, dependencyMap }) {
             throw new Error(
               Boolean(libMapKey)
                 ? `dependencyMap does not have "${libMapKey}" lib. Can not resolve.`
-                : `can not find "${libName ? libName : `lib: ${lib}`}" in "${
+                : `In file "${inputFilePath}": can not find "${libName ? libName : `lib: ${lib}`}" in "${
                     moduleInfo.fullName
                   }" module's dependencies`
             );

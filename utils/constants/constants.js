@@ -21,7 +21,7 @@ const JS_EXTENSIONS = [".js", ".mjs"];
 
 const DEFAULT_GROUP = "js";
 const GROUP_SEPARATOR = ".";
-const VERSION_SEPARATOR = ".";
+const VERSION_SEPARATOR = "-";
 
 exports.JSPM_BIN_PATH = JSPM_BIN_PATH;
 exports.CWD = CWD;
