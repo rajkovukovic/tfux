@@ -2,13 +2,14 @@
 
 const fs = require("fs");
 const path = require("path");
-const childProcess = require("child_process");
 const { AbstractEngine } = require("../abstract-engine/abstract-engine.js");
-const { JSPM_BIN_PATH } = require("../../constants/constants.js");
 const {
   transformAndCopyModules,
 } = require("./transform/transform-and-copy-modules.js");
 const { transformJsFile } = require("./transform/transform-js-file.js");
+const {
+  installDependenciesWithPeer,
+} = require("./install/install-dependencies-with-peer.js");
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -25,22 +26,15 @@ class JspmEngine extends AbstractEngine {
   }
 
   installDependencies(dependencies, recursively = false) {
-    return childProcess.execSync(
-      `cd ${
-        this._installedModulesRootPath
-      } && ${JSPM_BIN_PATH} install ${dependencies.join(" ")}`,
-      {
-        stdio: "inherit",
-      }
-    );
-    if (recursively) {
-    }
+    installDependenciesWithPeer(this, dependencies, recursively, new Set());
   }
 
   reloadJspmJSON() {
     const jspmJSONPath = path.join(this._installedModulesRootPath, "jspm.json");
     if (!fs.existsSync(jspmJSONPath)) {
-      throw new Error(`can not find "jspm.json" on path "${this.installedModulesPath}"`);
+      throw new Error(
+        `can not find "jspm.json" on path "${this.installedModulesPath}"`
+      );
     }
     this._jspmJSON = require(jspmJSONPath);
     return this._jspmJSON;
@@ -49,6 +43,15 @@ class JspmEngine extends AbstractEngine {
   get jspmJSON() {
     if (!this._jspmJSON) this.reloadJspmJSON();
     return this._jspmJSON;
+  }
+
+  saveJspmJSON() {
+    const jspmJSONPath = path.join(this._installedModulesRootPath, "jspm.json");
+    fs.writeFileSync(
+      jspmJSONPath,
+      JSON.stringify(this.jspmJSON, null, 2),
+      "utf8"
+    );
   }
 }
 
