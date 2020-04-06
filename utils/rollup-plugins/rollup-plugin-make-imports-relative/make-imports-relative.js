@@ -7,7 +7,7 @@ function isGlobalModule(path) {
   return /[a-zA-Z0-9@]/.test(path[0]);
 }
 
-function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
+function makeImportsRelative({ moduleInfo, importPrefix, dependencyMap }) {
   let options = null;
   return {
     name: "granular-imports",
@@ -35,10 +35,10 @@ function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
           libPath = libPath.join("/");
 
           const libMapKey =
-            currentModule && currentModule.dependencies
-              ? currentModule.dependencies.find(dependencyFullName => {
-                  const libMapKey = dependencyMap.get(dependencyFullName);
-                  return libMapKey && libMapKey.name === libName;
+            moduleInfo && moduleInfo.dependencies
+              ? moduleInfo.dependencies.find(dependencyFullName => {
+                  const key = dependencyMap.get(dependencyFullName);
+                  return key && key.name === libName;
                 }) || null
               : null;
 
@@ -56,14 +56,14 @@ function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
               Boolean(libMapKey)
                 ? `dependencyMap does not have "${libMapKey}" lib. Can not resolve.`
                 : `can not find "${libName ? libName : `lib: ${lib}`}" in "${
-                    currentModule.fullName
+                    moduleInfo.fullName
                   }" module's dependencies`
             );
           }
 
           let nextSource = path.join(
             importPrefix,
-            `${libInfo.libDirectoryName}${libPath ? "/" + libPath : ""}${
+            `${libInfo.relativeDestinationPath}${libPath ? "/" + libPath : ""}${
               libPath || isNodeInternalLib ? "" : "/index.js"
             }`
           );
@@ -74,7 +74,6 @@ function makeImportsRelative({ currentModule, importPrefix, dependencyMap }) {
           });
           return { id: nextSource, external: true };
         }
-        // console.log("resolveId", source);
         return null;
       } catch (error) {
         console.error("makeImportsRelative -> resolveId", error);

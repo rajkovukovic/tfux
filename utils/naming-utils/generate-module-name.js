@@ -1,27 +1,54 @@
 "use strict";
 
-import {
+const {
   DEFAULT_GROUP,
   GROUP_SEPARATOR,
   VERSION_SEPARATOR,
-} from "../constants";
+} = require("../constants/constants.js");
 
 function generateModuleName(groupName, moduleName, version) {
-  const cleanGroupName = !groupName
-    ? DEFAULT_GROUP
-    : groupName[0] === "@"
-    ? groupName.slice(1)
-    : groupName;
-  return `${cleanGroupName}${GROUP_SEPARATOR}${moduleName}${VERSION_SEPARATOR}${version}`;
+  if (groupName && typeof groupName !== "string")
+    throw new Error("groupName must be nill or a string");
+
+  if (!moduleName || typeof moduleName !== "string")
+    throw new Error("moduleName must be a non-empty string");
+
+  if (!version || typeof version !== "string")
+    throw new Error("version must be a non-empty string");
+
+  let cleanGroupName = groupName;
+  let cleanModuleName = moduleName;
+
+  if (moduleName.includes("/")) {
+    let split = moduleName.split("/");
+    if (split.length > 2) {
+      throw new Error(
+        `module name must be in format "@group/module" or "module". Instead got "${moduleName}"`
+      );
+    }
+    cleanGroupName = split[0];
+    cleanModuleName = split[1];
+  }
+
+  if (!cleanGroupName || cleanGroupName === "npm")
+    cleanGroupName = DEFAULT_GROUP;
+
+  if (cleanGroupName[0] === "@") cleanGroupName = cleanGroupName.slice(1);
+
+  return `${cleanGroupName}${GROUP_SEPARATOR}${cleanModuleName}${VERSION_SEPARATOR}${version}`;
 }
 
 /**
- * 
- * @param {ModuleInfo} moduleInfo 
+ *
+ * @param {ModuleInfo} moduleInfo
  */
-function moduleNameFromModuleInfo(moduleInfo) {
-  return generateModuleName(moduleInfo.group, moduleInfo.name, moduleInfo.version);
+function moduleInfoToFolderName(moduleInfo) {
+  return generateModuleName(
+    moduleInfo.group,
+    moduleInfo.name,
+    moduleInfo.version
+  );
 }
 
 exports.generateModuleName = generateModuleName;
-exports.moduleNameFromModuleInfo = moduleNameFromModuleInfo;
+exports.moduleInfoToFolderName = moduleInfoToFolderName;

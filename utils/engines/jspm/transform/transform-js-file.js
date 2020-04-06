@@ -9,24 +9,43 @@ const {
 /**
  *
  * @param {PackageManagerEngine} this - implicit attribute
- * @param {ModuleInfo} moduleInfo
- * @param {string} jsFile
- * @param {HashMap<string, ModuleInfo>} dependencyMap
+ * @param {Object}                      arg0
+ * @param {string}                      arg0.modulePath
+ * @param {ModuleInfo}                  arg0.moduleInfo
+ * @param {string}                      arg0.jsFile
+ * @param {HashMap<string, ModuleInfo>} arg0.dependencyMap
  */
-async function transformJsFile({ moduleInfo, jsFile, dependencyMap }) {
+async function transformJsFile({
+  modulePath,
+  moduleInfo,
+  jsFile,
+  dependencyMap,
+}) {
   const engine = this;
   const destinationDir = path.join(
     engine.destinationPath,
+    moduleInfo.relativeDestinationPath,
     path.dirname(jsFile)
   );
 
   const inputFilePath = path.join(modulePath, jsFile);
+  const importPrefix = path.relative(
+    inputFilePath,
+    engine.installedModulesPath
+  );
+  console.log({
+    destinationDir,
+    moduleInfo,
+    installedModulesPath: engine.installedModulesPath,
+    inputFilePath,
+    importPrefix,
+  });
 
   const inputOptions = {
     input: inputFilePath,
     plugins: [
       makeImportsRelative({
-        currentModule: moduleInfo,
+        moduleInfo,
         importPrefix: path.relative(inputFilePath, modulePath),
         dependencyMap,
       }),

@@ -32,7 +32,7 @@ async function install(engineName, dependencyOrDependencies) {
     // make dependencies vatra compatible and copy them to the vatra lib
     await engine.transformAndCopyModules();
   } catch (error) {
-    console.error(error);
+    console.error("\x1b[31m", error);
   }
 }
 

@@ -4,8 +4,11 @@ const fs = require("fs");
 const path = require("path");
 const {
   generateTransformList,
-} = require("../../utils/generate-transform-list");
-const { copyFiles } = require("../../../filesystem/copy-files");
+} = require("../../utils/generate-transform-list.js");
+const {
+  moduleInfoToFolderName,
+} = require("../../../naming-utils/generate-module-name.js");
+const { copyFiles } = require("../../../filesystem/copy-files.js");
 
 /**
  *
@@ -18,13 +21,20 @@ async function transformModule(moduleInfo, dependencyMap, force = true) {
   const engine = this;
   const modulePath = path.join(
     engine.installedModulesPath,
-    moduleInfoToFolderName(moduleInfo)
+    "jspm_packages",
+    moduleInfo.relativeInstallPath
   );
 
   const destinationPath = path.join(
-    engine.modulesDestinationPath,
-    moduleInfo.libDirectoryName()
+    engine.destinationPath,
+    moduleInfo.relativeDestinationPath
   );
+
+  // console.log({
+  //   moduleInfo,
+  //   modulePath,
+  //   destinationPath,
+  // });
 
   // if already exists in destination path do not install again
   // except if force is true
@@ -37,15 +47,16 @@ async function transformModule(moduleInfo, dependencyMap, force = true) {
     if (!moduleInfo.dependencies) {
       copyFiles(modulePath, jsFiles, destinationPath);
     } else {
-      console.log({
-        modulePath,
-        destinationPath,
-        jsFiles: jsFiles.length,
-        restFiles: restFiles.length,
-      });
+      // console.log({
+      //   modulePath,
+      //   destinationPath,
+      //   jsFiles: jsFiles.length,
+      //   restFiles: restFiles.length,
+      // });
 
       for (let jsFile of jsFiles) {
         await engine.transformJsFile({
+          modulePath,
           moduleInfo,
           jsFile,
           dependencyMap,

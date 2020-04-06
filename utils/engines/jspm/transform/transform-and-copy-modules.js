@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const { calcDependencyDepth } = require("../tools/jspm-dependency-depth");
+const {
+  generateModuleName,
+} = require("../../../naming-utils/generate-module-name.js");
 
 /**
  *
@@ -27,11 +30,10 @@ function transformAndCopyModules() {
 
   modulesMap.set("node", nodeInternalModulesMap);
 
-  const nodeInternalModules = fs
-    .readdirSync(
-      path.join(modulesPath, "npm/@jspm/core@1.0.4/nodelibs"),
-      "utf8"
-    )
+  fs.readdirSync(
+    path.join(modulesPath, "npm/@jspm/core@1.0.4/nodelibs"),
+    "utf8"
+  )
     .filter((filename) => path.extname(filename) === ".js")
     .forEach((filename) => {
       const filenameNoExtension = path.basename(
@@ -43,13 +45,18 @@ function transformAndCopyModules() {
         group: "npm",
         name: `@jspm/core/${filenameNoExtension}`,
         version: "1.0.4",
-        libDirectoryName: `npm.@jspm/core@1.0.4/nodelibs/${filename}`,
+        relativeDestinationPath: `${generateModuleName(
+          "jspm",
+          "core",
+          "1.0.4"
+        )}/nodelibs/${filename}`,
+        relativeInstallPath: `@jspm/core@1.0.4/nodelibs/${filename}`,
         dependencies: null,
         nestedDependencyLevel: 0,
       });
     });
 
-  console.log({ nodeInternalModulesMap });
+  // console.log({ nodeInternalModulesMap });
 
   modulesToTransform
     .sort((a, b) => a.nestedDependencyLevel - b.nestedDependencyLevel)
