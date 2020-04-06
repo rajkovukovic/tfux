@@ -1,292 +1,305 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>tribefire.cortex.ux</groupId>
+	<groupId>test.pom.parser</groupId>
 	<artifactId>vatra</artifactId>
 	<version>0.1.0</version>
 	<packaging>pom</packaging>
-	<name>vatra - 0.1.0</name>
-	<dependencyManagement>
-		<dependencies>
+	<name>test.pom.parser:vatra#0.1.0</name>
+	<dependencies>
 		<dependency>
-			<groupId>@babel</groupId>
-			<artifactId>helper-module-imports</artifactId>
-			<version>[7.0.0, 8.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>@babel</groupId>
-			<artifactId>helper-validator-identifier</artifactId>
-			<version>[7.9.0, 8.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>@babel</groupId>
-			<artifactId>types</artifactId>
-			<version>[7.8.3, 8.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>@rollup</groupId>
+			<groupId>rollup</groupId>
 			<artifactId>plugin-commonjs</artifactId>
-			<version>11.0.2</version>
+			<version>[11.0.2, 12.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>@rollup</groupId>
+			<groupId>rollup</groupId>
 			<artifactId>plugin-node-resolve</artifactId>
-			<version>7.1.1</version>
+			<version>[7.1.1, 8.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>@rollup</groupId>
-			<artifactId>pluginutils</artifactId>
-			<version>[3.0.6, 4.0.0)</version>
+			<groupId>js</groupId>
+			<artifactId>acorn</artifactId>
+			<version>[7.1.1, 8.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>@types</groupId>
-			<artifactId>estree</artifactId>
-			<version>[0.0.39, 0.0.39)</version>
+			<groupId>js</groupId>
+			<artifactId>estree-walker</artifactId>
+			<version>[2.0.1, 3.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>@types</groupId>
-			<artifactId>node</artifactId>
-			<version>[0.0.0, 9999.9999.9999)</version>
-		</dependency>
-		<dependency>
-			<groupId>@types</groupId>
-			<artifactId>resolve</artifactId>
-			<version>[0.0.8, 0.0.8)</version>
-		</dependency>
-		<dependency>
-			<groupId>balanced-match</groupId>
-			<artifactId>balanced-match</artifactId>
-			<version>[1.0.0, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>brace-expansion</groupId>
-			<artifactId>brace-expansion</artifactId>
-			<version>[1.1.7, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>builtin-modules</groupId>
-			<artifactId>builtin-modules</artifactId>
-			<version>[3.1.0, 4.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>commondir</groupId>
-			<artifactId>commondir</artifactId>
-			<version>[1.0.1, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>concat-map</groupId>
-			<artifactId>concat-map</artifactId>
-			<version>[0.0.1, 0.0.1)</version>
-		</dependency>
-		<dependency>
-			<groupId>estree-walker</groupId>
+			<groupId>js</groupId>
 			<artifactId>estree-walker</artifactId>
 			<version>[1.0.1, 2.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>estree-walker</groupId>
+			<groupId>js</groupId>
 			<artifactId>estree-walker</artifactId>
 			<version>[0.6.1, 0.7.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>find-cache-dir</groupId>
-			<artifactId>find-cache-dir</artifactId>
-			<version>[3.2.0, 4.0.0)</version>
+			<groupId>js</groupId>
+			<artifactId>mkdirp</artifactId>
+			<version>[1.0.3, 2.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>find-up</groupId>
-			<artifactId>find-up</artifactId>
+			<groupId>js</groupId>
+			<artifactId>rimraf</artifactId>
+			<version>[3.0.2, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>rollup</artifactId>
+			<version>[2.2.0, 3.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>rollup-plugin-babel</artifactId>
+			<version>[4.4.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>rollup-plugin-typescript2</artifactId>
+			<version>[0.26.0, 0.27.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>typescript</artifactId>
+			<version>[3.8.3, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>untildify</artifactId>
 			<version>[4.0.0, 5.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>fs-extra</groupId>
-			<artifactId>fs-extra</artifactId>
-			<version>[8.1.0, 8.1.0)</version>
+			<groupId>js</groupId>
+			<artifactId>xml2js</artifactId>
+			<version>[0.4.23, 0.5.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>fs.realpath</groupId>
-			<artifactId>fs.realpath</artifactId>
-			<version>[1.0.0, 2.0.0)</version>
+			<groupId>babel</groupId>
+			<artifactId>types</artifactId>
+			<version>[7.8.3, 8.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>fsevents</groupId>
-			<artifactId>fsevents</artifactId>
-			<version>[2.1.2, 2.2.0)</version>
+			<groupId>babel</groupId>
+			<artifactId>helper-validator-identifier</artifactId>
+			<version>[7.9.0, 8.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>glob</groupId>
-			<artifactId>glob</artifactId>
-			<version>[7.1.3, 8.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>graceful-fs</groupId>
-			<artifactId>graceful-fs</artifactId>
-			<version>[4.2.0, 5.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>inflight</groupId>
-			<artifactId>inflight</artifactId>
-			<version>[1.0.4, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>inherits</groupId>
-			<artifactId>inherits</artifactId>
-			<version>[2.0.0, 3.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>is-module</groupId>
-			<artifactId>is-module</artifactId>
-			<version>[1.0.0, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>is-reference</groupId>
-			<artifactId>is-reference</artifactId>
-			<version>[1.1.2, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>jsonfile</groupId>
-			<artifactId>jsonfile</artifactId>
-			<version>[4.0.0, 5.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>locate-path</groupId>
-			<artifactId>locate-path</artifactId>
-			<version>[5.0.0, 6.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>lodash</groupId>
+			<groupId>js</groupId>
 			<artifactId>lodash</artifactId>
 			<version>[4.17.13, 5.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>magic-string</groupId>
-			<artifactId>magic-string</artifactId>
-			<version>[0.25.2, 0.26.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>make-dir</groupId>
-			<artifactId>make-dir</artifactId>
-			<version>[3.0.2, 4.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>minimatch</groupId>
-			<artifactId>minimatch</artifactId>
-			<version>[3.0.4, 4.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>mkdirp</groupId>
-			<artifactId>mkdirp</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>once</groupId>
-			<artifactId>once</artifactId>
-			<version>[1.3.0, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>p-limit</groupId>
-			<artifactId>p-limit</artifactId>
-			<version>[2.2.0, 3.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>p-locate</groupId>
-			<artifactId>p-locate</artifactId>
-			<version>[4.1.0, 5.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>p-try</groupId>
-			<artifactId>p-try</artifactId>
-			<version>[2.0.0, 3.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>path-exists</groupId>
-			<artifactId>path-exists</artifactId>
-			<version>[4.0.0, 5.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>path-is-absolute</groupId>
-			<artifactId>path-is-absolute</artifactId>
-			<version>[1.0.0, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>path-parse</groupId>
-			<artifactId>path-parse</artifactId>
-			<version>[1.0.6, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>pkg-dir</groupId>
-			<artifactId>pkg-dir</artifactId>
-			<version>[4.1.0, 5.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>resolve</groupId>
-			<artifactId>resolve</artifactId>
-			<version>[1.15.1, 1.15.1)</version>
-		</dependency>
-		<dependency>
-			<groupId>rimraf</groupId>
-			<artifactId>rimraf</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>rollup</groupId>
-			<artifactId>rollup</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>rollup-plugin-babel</groupId>
-			<artifactId>rollup-plugin-babel</artifactId>
-			<version>4.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>rollup-plugin-typescript2</groupId>
-			<artifactId>rollup-plugin-typescript2</artifactId>
-			<version>0.26.0</version>
-		</dependency>
-		<dependency>
-			<groupId>rollup-pluginutils</groupId>
-			<artifactId>rollup-pluginutils</artifactId>
-			<version>[2.8.2, 2.8.2)</version>
-		</dependency>
-		<dependency>
-			<groupId>semver</groupId>
-			<artifactId>semver</artifactId>
-			<version>[6.0.0, 7.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>sourcemap-codec</groupId>
-			<artifactId>sourcemap-codec</artifactId>
-			<version>[1.4.4, 2.0.0)</version>
-		</dependency>
-		<dependency>
-			<groupId>to-fast-properties</groupId>
+			<groupId>js</groupId>
 			<artifactId>to-fast-properties</artifactId>
 			<version>[2.0.0, 3.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>tslib</groupId>
-			<artifactId>tslib</artifactId>
-			<version>[1.10.0, 1.10.0)</version>
+			<groupId>rollup</groupId>
+			<artifactId>pluginutils</artifactId>
+			<version>[3.0.6, 4.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>typescript</groupId>
-			<artifactId>typescript</artifactId>
-			<version>3.8.3</version>
+			<groupId>js</groupId>
+			<artifactId>is-reference</artifactId>
+			<version>[1.1.2, 2.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>universalify</groupId>
+			<groupId>js</groupId>
+			<artifactId>magic-string</artifactId>
+			<version>[0.25.2, 0.26.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>resolve</artifactId>
+			<version>[1.15.1, 1.15.1)</version>
+		</dependency>
+		<dependency>
+			<groupId>types</groupId>
+			<artifactId>resolve</artifactId>
+			<version>[0.0.8, 0.0.8)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>builtin-modules</artifactId>
+			<version>[3.1.0, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>is-module</artifactId>
+			<version>[1.0.0, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>types</groupId>
+			<artifactId>node</artifactId>
+			<version>[0.0.0, 9999.9999.9999)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>balanced-match</artifactId>
+			<version>[1.0.0, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>concat-map</artifactId>
+			<version>[0.0.1, 0.0.1)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>commondir</artifactId>
+			<version>[1.0.1, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>make-dir</artifactId>
+			<version>[3.0.2, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>pkg-dir</artifactId>
+			<version>[4.1.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>locate-path</artifactId>
+			<version>[5.0.0, 6.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>path-exists</artifactId>
+			<version>[4.0.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>graceful-fs</artifactId>
+			<version>[4.2.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>jsonfile</artifactId>
+			<version>[4.0.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
 			<artifactId>universalify</artifactId>
 			<version>[0.1.0, 0.2.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>untildify</groupId>
-			<artifactId>untildify</artifactId>
-			<version>4.0.0</version>
+			<groupId>js</groupId>
+			<artifactId>fs.realpath</artifactId>
+			<version>[1.0.0, 2.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>wrappy</groupId>
+			<groupId>js</groupId>
+			<artifactId>inflight</artifactId>
+			<version>[1.0.4, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>inherits</artifactId>
+			<version>[2.0.0, 3.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>minimatch</artifactId>
+			<version>[3.0.4, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>once</artifactId>
+			<version>[1.3.0, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>path-is-absolute</artifactId>
+			<version>[1.0.0, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
 			<artifactId>wrappy</artifactId>
 			<version>[1.0.0, 2.0.0)</version>
 		</dependency>
-		</dependencies> 
-	 </dependencyManagement> 
- </project>
+		<dependency>
+			<groupId>types</groupId>
+			<artifactId>estree</artifactId>
+			<version>[0.0.39, 0.0.39)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>p-locate</artifactId>
+			<version>[4.1.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>sourcemap-codec</artifactId>
+			<version>[1.4.4, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>semver</artifactId>
+			<version>[6.0.0, 7.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>brace-expansion</artifactId>
+			<version>[1.1.7, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>p-try</artifactId>
+			<version>[2.0.0, 3.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>p-limit</artifactId>
+			<version>[2.2.0, 3.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>find-up</artifactId>
+			<version>[4.0.0, 5.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>path-parse</artifactId>
+			<version>[1.0.6, 2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>glob</artifactId>
+			<version>[7.1.3, 8.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>fsevents</artifactId>
+			<version>[2.1.2, 2.2.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>babel</groupId>
+			<artifactId>helper-module-imports</artifactId>
+			<version>[7.0.0, 8.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>rollup-pluginutils</artifactId>
+			<version>[2.8.2, 2.8.2)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>find-cache-dir</artifactId>
+			<version>[3.2.0, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>fs-extra</artifactId>
+			<version>[8.1.0, 8.1.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>js</groupId>
+			<artifactId>tslib</artifactId>
+			<version>[1.10.0, 1.10.0)</version>
+		</dependency>
+	</dependencies>
+</project>
