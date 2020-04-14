@@ -82,7 +82,7 @@ function installPeerDependenciesIfAny(
 function installDependenciesWithPeer(
   engine,
   dependencies,
-  recursively,
+  installTransitiveDependencies,
   checkedDependencies
 ) {
   childProcess.execSync(
@@ -96,7 +96,7 @@ function installDependenciesWithPeer(
 
   engine.reloadJspmJSON();
 
-  if (recursively) {
+  if (installTransitiveDependencies) {
     const modules = jspmFormatDependencies(engine.jspmJSON.resolve);
     console.log({ modules });
 

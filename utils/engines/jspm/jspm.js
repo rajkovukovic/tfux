@@ -26,8 +26,8 @@ class JspmEngine extends AbstractEngine {
     this.transformJsFile = transformJsFile.bind(this);
   }
 
-  installDependencies(dependencies, recursively = false) {
-    installDependenciesWithPeer(this, dependencies, recursively, new Set());
+  installDependencies(dependencies, installTransitiveDependencies = false) {
+    installDependenciesWithPeer(this, dependencies, installTransitiveDependencies, new Set());
   }
 
   reloadJspmJSON() {
