@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const mkdirp = require("mkdirp");
-const rimraf = require("rimraf");
-const { transformModule } = require("./transform/transform-module.js");
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const rimraf = require('rimraf');
+const { transformModule } = require('./transform/transform-module.js');
 
 class AbstractEngine {
   _destinationPath;
@@ -12,12 +12,12 @@ class AbstractEngine {
   constructor(destinationPath, installedModulesPath) {
     if (!destinationPath)
       throw new Error(
-        "destinationPath is a required param for PackageManagerEngine"
+        'destinationPath is a required param for PackageManagerEngine'
       );
 
     if (!installedModulesPath)
       throw new Error(
-        "installedModulesPath is a required param for PackageManagerEngine"
+        'installedModulesPath is a required param for PackageManagerEngine'
       );
 
     // create destination path if not exists
@@ -47,19 +47,25 @@ class AbstractEngine {
 
   installDependencies() {
     throw new Error(
-      "installDependencies is an abstract method that needs to be implemented by a derived class"
+      'installDependencies is an abstract method that needs to be implemented by a derived class'
     );
   }
 
   transformAndCopyModules() {
     throw new Error(
-      "transformAndCopyModules is an abstract method that needs to be implemented by a derived class"
+      'transformAndCopyModules is an abstract method that needs to be implemented by a derived class'
     );
   }
 
   transformJsFile() {
     throw new Error(
-      "transformJsFile is an abstract method that needs to be implemented by a derived class"
+      'transformJsFile is an abstract method that needs to be implemented by a derived class'
+    );
+  }
+
+  addPomXml() {
+    throw new Error(
+      'addPomXml is an abstract method that needs to be implemented by a derived class'
     );
   }
 }

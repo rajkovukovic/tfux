@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const { calcDependencyDepth } = require("../tools/jspm-dependency-depth");
+const fs = require('fs');
+const path = require('path');
+const { calcDependencyDepth } = require('../tools/jspm-dependency-depth');
 const {
   generateModuleName,
-} = require("../../../naming-utils/generate-module-name.js");
+} = require('../../../naming-utils/generate-module-name.js');
 
 /**
  *
@@ -15,7 +15,9 @@ function transformAndCopyModules() {
   const { installedModulesPath, jspmJSON } = engine;
 
   if (!fs.existsSync(installedModulesPath)) {
-    throw new Error(`can not find "jspm_packages" on path "${installedModulesPath}"`);
+    throw new Error(
+      `can not find "jspm_packages" on path "${installedModulesPath}"`
+    );
   }
 
   const modulesMap = calcDependencyDepth(jspmJSON);
@@ -24,13 +26,13 @@ function transformAndCopyModules() {
 
   const nodeInternalModulesMap = new Map();
 
-  modulesMap.set("node", nodeInternalModulesMap);
+  modulesMap.set('node', nodeInternalModulesMap);
 
   fs.readdirSync(
-    path.join(installedModulesPath, "npm/@jspm/core@1.0.4/nodelibs"),
-    "utf8"
+    path.join(installedModulesPath, 'npm/@jspm/core@1.0.4/nodelibs'),
+    'utf8'
   )
-    .filter((filename) => path.extname(filename) === ".js")
+    .filter((filename) => path.extname(filename) === '.js')
     .forEach((filename) => {
       const filenameNoExtension = path.basename(
         filename,
@@ -38,13 +40,13 @@ function transformAndCopyModules() {
       );
       nodeInternalModulesMap.set(filenameNoExtension, {
         fullName: null,
-        group: "npm",
+        group: 'npm',
         name: `@jspm/core/${filenameNoExtension}`,
-        version: "1.0.4",
+        version: '1.0.4',
         relativeDestinationPath: `${generateModuleName(
-          "jspm",
-          "core",
-          "1.0.4"
+          'jspm',
+          'core',
+          '1.0.4'
         )}/nodelibs/${filename}`,
         relativeInstallPath: `@jspm/core@1.0.4/nodelibs/${filename}`,
         dependencies: null,
@@ -58,6 +60,7 @@ function transformAndCopyModules() {
     .sort((a, b) => a.nestedDependencyLevel - b.nestedDependencyLevel)
     .forEach((moduleInfo) => {
       engine.transformModule(moduleInfo, modulesMap);
+      engine.addPomXml(moduleInfo);
     });
 }
 
