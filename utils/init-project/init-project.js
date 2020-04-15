@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const mkdirp = require("mkdirp");
 const { copyFolder } = require("../filesystem/copy-folder.js");
+const { installGlobally } = require("../install/install-globally.js");
 const {
   PROJECT_TEMPLATE_OPTIONS,
   VATRA_TEMPLATES_PATH,
@@ -25,15 +26,22 @@ const optionsPriority = [
  *
  * @param {PathLike} destinationPath
  * @param {Object}   options
+ * @param {string[]} options.deps
+ * @param {boolean}  options.editor
  * @param {boolean}  options.jsx
+ * @param {boolean}  options.svelte
+ * @param {boolean}  options.vue
  * @param {boolean}  options.typescript
  */
-function initProject(destinationPath, options) {
+function initProject(destinationPath, { deps, editor, ...restOptions }) {
+  // create destination dir
   if (!fs.existsSync(destinationPath)) {
     mkdirp.sync(destinationPath);
   }
+
+  // validate options
   const selectedFrameworkOptions = frameworkOptions.filter((option) =>
-    Boolean(options[option])
+    Boolean(restOptions[option])
   );
   if (selectedFrameworkOptions.length > 1) {
     throw new Error(
@@ -42,16 +50,29 @@ function initProject(destinationPath, options) {
       )}`
     );
   }
+
+  // calculate which project template should be the staring point
   let concatenatedOptions = optionsPriority
-    .filter((option) => Boolean(options[option]))
+    .filter((option) => Boolean(restOptions[option]))
     .join("-");
   concatenatedOptions = concatenatedOptions || "js";
   const templatePath = path.join(VATRA_TEMPLATES_PATH, concatenatedOptions);
+
+  // copy project template files to destination dir
   if (fs.existsSync(templatePath)) {
     copyFolder(templatePath, destinationPath);
-  } else throw new Error(`Template "${concatenatedOptions}" has not been implemented yet.`);
-  
-  // link dependencies
+  } else
+    throw new Error(
+      `Template "${concatenatedOptions}" has not been implemented yet.`
+    );
+
+  // install dependencies
+  if (deps && deps.length > 0) {
+    installGlobally(deps);
+
+    // link dependencies
+    linkDependencies();
+  }
 
   // create POM file
   fs.writeFileSync(path.join(destinationPath, "pom.xml"), "", "utf8");

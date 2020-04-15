@@ -4,7 +4,7 @@
 
 const path = require("path");
 const commandLineArgs = require("command-line-args");
-const { install } = require("./utils/install/install.js");
+const { installGlobally } = require("./utils/install/install-globally.js");
 const {
   CLI_TOOL_NAME,
   ENGINE_TYPES,
@@ -46,7 +46,7 @@ function main(command, argv) {
         [{ name: "global", alias: "g", type: Boolean }],
         { argv, partial: true }
       );
-      install(ENGINE_TYPES.jspm, argv[0]);
+      installGlobally(argv[0]);
       break;
     case undefined:
       console.error(`${CLI_TOOL_NAME} needs a command to run`);

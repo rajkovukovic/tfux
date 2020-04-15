@@ -14,7 +14,7 @@ const engineFactories = {
   [ENGINE_TYPES.npm]: NpmEngine,
 };
 
-async function install(engineName, dependencyOrDependencies) {
+async function installGlobally(dependencyOrDependencies, engineName = ENGINE_TYPES.jspm) {
   console.log({ VATRA_LIB_PATH, TMP_DIR });
   if (!engineName || !engineFactories[engineName])
     throw new Error(
@@ -44,4 +44,4 @@ async function install(engineName, dependencyOrDependencies) {
   }
 }
 
-exports.install = install;
+exports.installGlobally = installGlobally;
