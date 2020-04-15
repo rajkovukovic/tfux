@@ -46,14 +46,13 @@ function initProject(destinationPath, options) {
     .filter((option) => Boolean(options[option]))
     .join("-");
   concatenatedOptions = concatenatedOptions || "js";
-  console.log({ concatenatedOptions });
-  // if (svelte) {
-  //   copyFolder(path.join(VATRA_TEMPLATES_PATH, "svelte"), destinationPath);
-  // } else if (jsx) {
-  // } else {
-  //   copyFolder(path.join(VATRA_TEMPLATES_PATH, "js"), destinationPath);
-  // }
+  const templatePath = path.join(VATRA_TEMPLATES_PATH, concatenatedOptions);
+  if (fs.existsSync(templatePath)) {
+    copyFolder(templatePath, destinationPath);
+  } else throw new Error(`Template "${concatenatedOptions}" has not been implemented yet.`);
+  
   // link dependencies
+
   // create POM file
   fs.writeFileSync(path.join(destinationPath, "pom.xml"), "", "utf8");
 }
