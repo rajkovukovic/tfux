@@ -64,16 +64,23 @@ class JspmEngine extends AbstractEngine {
     const pom = returnPomXml({
       [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
     });
-    fs.writeFile(
-      this.destinationPath +
-        '/' +
-        moduleInfo.relativeDestinationPath +
-        '/pom.xml',
-      pom,
-      (err) =>
-        (err && console.error(err)) ||
-        console.log(`### Finished writing pom.xml File`)
-    );
+    if (pom) {
+      fs.writeFile(
+        path.join(
+          this.destinationPath,
+          moduleInfo.relativeDestinationPath,
+          'pom.xml'
+        ),
+        pom,
+        (err) =>
+          (err && console.error(err)) ||
+          console.log(`### Finished writing pom.xml File`)
+      );
+    } else {
+      console.log(
+        `Pom file can not be generated for ${moduleInfo.fullName} !!!`
+      );
+    }
   }
 
   copyToMvnRepo(moduleInfo, modulesMap) {
