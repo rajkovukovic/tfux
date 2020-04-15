@@ -33,6 +33,12 @@ const DEFAULT_GROUP = "js";
 const GROUP_SEPARATOR = ".";
 const VERSION_SEPARATOR = "-";
 
+const PROJECT_TEMPLATE_OPTIONS = {
+  svelte: "svelte",
+  typescript: "typescript",
+  vue: "vue",
+};
+
 exports.CLI_TOOL_NAME = CLI_TOOL_NAME;
 exports.JSPM_BIN_PATH = JSPM_BIN_PATH;
 exports.CWD = CWD;
@@ -48,3 +54,4 @@ exports.ENGINE_TYPES = ENGINE_TYPES;
 exports.DEFAULT_GROUP = DEFAULT_GROUP;
 exports.GROUP_SEPARATOR = GROUP_SEPARATOR;
 exports.VERSION_SEPARATOR = VERSION_SEPARATOR;
+exports.PROJECT_TEMPLATE_OPTIONS = PROJECT_TEMPLATE_OPTIONS;

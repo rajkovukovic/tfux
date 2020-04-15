@@ -1,0 +1,6 @@
+[
+  {
+    "input": "src/MyWebComponent.svelte",
+    "output": "my-web-component"
+  }
+]

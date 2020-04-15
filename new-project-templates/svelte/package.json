@@ -1,0 +1,34 @@
+{
+  "name": "tfjs-web-components-demo",
+  "version": "0.1.0",
+  "main": "output/index-esm.js",
+  "files": [
+    "output/index.js"
+  ],
+  "module": "output/index-esm.js",
+  "license": "ISC",
+  "scripts": {
+    "start-old": "rm -rf ./output && rm -rf ./docs/lib && NODE_ENV=development rollup --config --watch",
+    "start": "rm -rf ./output && NODE_ENV=development rollup --config --watch",
+    "build": "rm -rf ./output && NODE_ENV=production rollup --config"
+  },
+  "dependencies": {
+    "svelte": "^3.20.1"
+  },
+  "devDependencies": {
+    "node-sass": "^4.13.1",
+    "rollup": "^1.29.1",
+    "rollup-plugin-bundle-html": "^0.2.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-livereload": "^1.0.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-scss": "^2.1.0",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-svelte": "^5.1.1",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "svelte-preprocess": "^3.3.0",
+    "typescript": "^3.7.5"
+  }
+}
