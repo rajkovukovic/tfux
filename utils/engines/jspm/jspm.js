@@ -61,10 +61,11 @@ class JspmEngine extends AbstractEngine {
     });
     if (pom) {
       fs.writeFile(
-        this.destinationPath +
-          '/' +
-          moduleInfo.relativeDestinationPath +
-          '/pom.xml',
+        path.join(
+          this.destinationPath,
+          moduleInfo.relativeDestinationPath,
+          'pom.xml'
+        ),
         pom,
         (err) =>
           (err && console.error(err)) ||
