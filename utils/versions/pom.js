@@ -30,10 +30,10 @@ function returnPomXml(dependency) {
           resolvedVersion: parseJspmJSONDependency(dep[1].resolve[d[0]])[2],
         };
       });
-      return (xmlPom = getPom(
+      return getPom(
         `${versionDep.group}:${versionDep.artifact}#${depVersionParts[2]}`,
         Object.values(requiresMap)
-      ));
+      );
     } catch (error) {
       if (error.code == 'MODULE_NOT_FOUND') {
         console.log(

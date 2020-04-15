@@ -61,6 +61,7 @@ function transformAndCopyModules() {
     .forEach((moduleInfo) => {
       engine.transformModule(moduleInfo, modulesMap);
       engine.addPomXml(moduleInfo);
+      engine.copyToMvnRepo(moduleInfo, modulesMap);
     });
 }
 

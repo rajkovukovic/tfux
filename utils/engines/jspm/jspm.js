@@ -27,7 +27,12 @@ class JspmEngine extends AbstractEngine {
   }
 
   installDependencies(dependencies, installTransitiveDependencies = false) {
-    installDependenciesWithPeer(this, dependencies, installTransitiveDependencies, new Set());
+    installDependenciesWithPeer(
+      this,
+      dependencies,
+      installTransitiveDependencies,
+      new Set()
+    );
   }
 
   reloadJspmJSON() {
@@ -69,6 +74,10 @@ class JspmEngine extends AbstractEngine {
         (err && console.error(err)) ||
         console.log(`### Finished writing pom.xml File`)
     );
+  }
+
+  copyToMvnRepo(moduleInfo, modulesMap) {
+    console.log({ moduleInfo, modulesMap });
   }
 }
 
