@@ -11,6 +11,7 @@ const {
   installDependenciesWithPeer,
 } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
+const { zipAndCopyToRepo } = require('../utils/generate-mvn-repo.js');
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -65,16 +66,18 @@ class JspmEngine extends AbstractEngine {
       [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
     });
     if (pom) {
-      fs.writeFile(
+      fs.writeFileSync(
         path.join(
           this.destinationPath,
           moduleInfo.relativeDestinationPath,
           'pom.xml'
         ),
         pom,
-        (err) =>
-          (err && console.error(err)) ||
-          console.log(`### Finished writing pom.xml File`)
+        'utf8'
+      );
+      console.log(
+        'Finished writing pom.xml File for ' +
+          moduleInfo.relativeDestinationPath
       );
     } else {
       console.log(
@@ -83,8 +86,8 @@ class JspmEngine extends AbstractEngine {
     }
   }
 
-  copyToMvnRepo(moduleInfo, modulesMap) {
-    console.log({ moduleInfo, modulesMap });
+  copyToMvnRepo(moduleInfo) {
+    zipAndCopyToRepo(moduleInfo.fullName);
   }
 }
 
