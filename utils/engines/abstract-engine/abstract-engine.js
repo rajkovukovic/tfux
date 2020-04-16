@@ -68,6 +68,12 @@ class AbstractEngine {
       'addPomXml is an abstract method that needs to be implemented by a derived class'
     );
   }
+
+  copyToMvnRepo() {
+    throw new Error(
+      'copyToMvnRepo is an abstract method that needs to be implemented by a derived class'
+    );
+  }
 }
 
 exports.AbstractEngine = AbstractEngine;

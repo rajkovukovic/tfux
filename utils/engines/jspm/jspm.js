@@ -11,6 +11,7 @@ const {
   installDependenciesWithPeer,
 } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
+const { zipAndCopyToRepo } = require('../utils/generate-mvn-repo.js');
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -27,7 +28,12 @@ class JspmEngine extends AbstractEngine {
   }
 
   installDependencies(dependencies, installTransitiveDependencies = false) {
-    installDependenciesWithPeer(this, dependencies, installTransitiveDependencies, new Set());
+    installDependenciesWithPeer(
+      this,
+      dependencies,
+      installTransitiveDependencies,
+      new Set()
+    );
   }
 
   reloadJspmJSON() {
@@ -59,16 +65,29 @@ class JspmEngine extends AbstractEngine {
     const pom = returnPomXml({
       [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
     });
-    fs.writeFile(
-      this.destinationPath +
-        '/' +
-        moduleInfo.relativeDestinationPath +
-        '/pom.xml',
-      pom,
-      (err) =>
-        (err && console.error(err)) ||
-        console.log(`### Finished writing pom.xml File`)
-    );
+    if (pom) {
+      fs.writeFileSync(
+        path.join(
+          this.destinationPath,
+          moduleInfo.relativeDestinationPath,
+          'pom.xml'
+        ),
+        pom,
+        'utf8'
+      );
+      console.log(
+        'Finished writing pom.xml File for ' +
+          moduleInfo.relativeDestinationPath
+      );
+    } else {
+      console.log(
+        `Pom file can not be generated for ${moduleInfo.fullName} !!!`
+      );
+    }
+  }
+
+  copyToMvnRepo(moduleInfo) {
+    zipAndCopyToRepo(moduleInfo.fullName);
   }
 }
 

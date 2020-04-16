@@ -1,0 +1,5 @@
+{
+  "mvn_m2_path": "~/.m2",
+  "mvn_settings_file": "settings.xml",
+  "mvn_repo_path": "~/.m2/test-repository"
+}
