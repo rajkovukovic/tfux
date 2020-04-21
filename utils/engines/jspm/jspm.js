@@ -7,6 +7,7 @@ const { transformAndCopyModules } = require('./transform/transform-and-copy-modu
 const { transformJsFile } = require('./transform/transform-js-file.js');
 const { installDependenciesWithPeer } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
+const { zipAndCopyToRepo } = require('../utils/generate-mvn-repo.js');
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -59,14 +60,19 @@ class JspmEngine extends AbstractEngine {
       },
     });
     if (pom) {
-      fs.writeFile(
+      fs.writeFileSync(
         path.join(this.destinationPath, moduleInfo.relativeDestinationPath, 'pom.xml'),
         pom,
-        (err) => (err && console.error(err)) || console.log(`### Finished writing pom.xml File`)
+        'utf8'
       );
+      console.log('Finished writing pom.xml File for ' + moduleInfo.relativeDestinationPath);
     } else {
       console.log(`Pom file can not be generated for ${moduleInfo.fullName} !!!`);
     }
+  }
+
+  copyToMvnRepo(moduleInfo) {
+    zipAndCopyToRepo(moduleInfo.fullName);
   }
 }
 

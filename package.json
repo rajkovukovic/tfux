@@ -22,6 +22,7 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "acorn": "^7.1.1",
+    "archiver": "^4.0.1",
     "command-line-args": "^5.1.1",
     "estree-walker": "^2.0.1",
     "jspm": "^2.0.0-beta.7",
@@ -32,6 +33,7 @@
     "rollup-plugin-hashbang": "^2.2.2",
     "rollup-plugin-typescript2": "^0.26.0",
     "typescript": "^3.8.3",
+    "uglify-es": "^3.3.9",
     "untildify": "^4.0.0",
     "xml2js": "^0.4.23",
     "xml2json": "^0.12.0"

@@ -8,6 +8,7 @@ const { getGroupAndArt, getPom } = require('../versions/versions');
 const {
   parseJspmJSONDependency,
 } = require('../engines/jspm/tools/parse-jspm.js');
+const path = require('path');
 
 /**
  *
@@ -21,7 +22,11 @@ function returnPomXml(dependency) {
   if (dep[1].resolve) {
     // get package.json
     try {
-      const pack = require(`${VATRA_LIB_PATH}/${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}/package.json`);
+      const pack = require(path.join(
+        VATRA_LIB_PATH,
+        `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`,
+        'package.json'
+      ));
       let requiresMap = {};
       Object.entries(pack.dependencies).forEach((d) => {
         requiresMap[d[0]] = {
