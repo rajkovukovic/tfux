@@ -8,6 +8,7 @@ const untildify = require('untildify');
 const mkdirp = require('mkdirp');
 const config = require('../../../vatra.config.json');
 const xml2js = require('xml2js');
+const UglifyES = require('uglify-es');
 const {
   GROUP_SEPARATOR,
   VERSION_SEPARATOR,
@@ -96,6 +97,15 @@ function zipAndCopyToRepo(name) {
       `${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}.zip`
     )
   );
+  // Create min versions
+  minZipFolder(
+    sourcePath,
+    path.join(
+      path.resolve(untildify(pathToRepo)),
+      `${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}-min.zip`
+    ),
+    `${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`
+  );
 }
 
 function zipFolder(sourcePath, pathToZip) {
@@ -131,7 +141,93 @@ function zipFolder(sourcePath, pathToZip) {
   archive.directory(sourcePath, false);
   archive.finalize();
 }
+
+function minZipFolder(sourcePath, pathToZip, zipRoot) {
+  const output = fs.createWriteStream(pathToZip);
+  const archive = archiver('zip', {
+    zlib: { level: 9 }, // Sets the compression level.
+  });
+
+  output.on('close', function () {
+    console.log(archive.pointer() + ' total bytes');
+    console.log(
+      'archiver has been finalized and the output file descriptor has closed.'
+    );
+  });
+
+  output.on('end', function () {
+    console.log('Data has been drained');
+  });
+
+  archive.on('warning', function (err) {
+    if (err.code === 'ENOENT') {
+      console.warn(err);
+    } else {
+      throw err;
+    }
+  });
+
+  archive.on('error', function (err) {
+    throw err;
+  });
+
+  archive.pipe(output);
+
+  getAllFiles(sourcePath).forEach((f) => {
+    // is js, mjs or css - minimize, else - copy
+    const ext = ['js', 'mjs', 'css'];
+    if (ext.find((e) => f.name.split('.').pop() === e)) {
+      //minify
+      // console.log(f.fullName);
+      const min = minify(f.fullName);
+      archive.append(min.code, { name: f.fullName.split(zipRoot).pop() });
+    } else {
+      archive.file(f.fullName, { name: f.fullName.split(zipRoot).pop() });
+    }
+  });
+
+  archive.finalize();
+}
+
+const getAllFiles = function (dirPath, arrayOfFiles) {
+  const files = fs.readdirSync(dirPath);
+
+  arrayOfFiles = arrayOfFiles || [];
+
+  files.forEach(function (file) {
+    if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
+      arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles);
+    } else {
+      arrayOfFiles.push({ fullName: path.join(dirPath, file), name: file });
+    }
+  });
+
+  return arrayOfFiles;
+};
+
+const minify = function (file) {
+  try {
+    const options = {
+      toplevel: true,
+      compress: {
+        passes: 2,
+      },
+      output: {
+        beautify: false,
+        preamble: '/* uglified */',
+      },
+      warnings: true,
+    };
+
+    const codeString = fs.readFileSync(untildify(file), 'utf-8').toString();
+    return UglifyES.minify(codeString, options);
+  } catch (error) {
+    console.error('\x1b[31m', 'minify file ' + file, error);
+  }
+};
+
 exports.checkMvnInstalled = checkMvnInstalled;
 exports.createDirPath = createDirPath;
 exports.getMvnRepositoryPath = getMvnRepositoryPath;
 exports.zipAndCopyToRepo = zipAndCopyToRepo;
+exports.getAllFiles = getAllFiles;

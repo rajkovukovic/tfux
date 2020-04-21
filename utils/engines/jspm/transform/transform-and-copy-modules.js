@@ -29,7 +29,7 @@ function transformAndCopyModules() {
   modulesMap.set('node', nodeInternalModulesMap);
 
   fs.readdirSync(
-    path.join(installedModulesPath, 'npm/@jspm/core@1.0.4/nodelibs'),
+    path.join(installedModulesPath, 'npm/@jspm/core@1.1.0/nodelibs'),
     'utf8'
   )
     .filter((filename) => path.extname(filename) === '.js')
@@ -42,11 +42,11 @@ function transformAndCopyModules() {
         fullName: null,
         group: 'npm',
         name: `@jspm/core/${filenameNoExtension}`,
-        version: '1.0.4',
+        version: '1.1.0',
         relativeDestinationPath: `${generateModuleName(
           'jspm',
           'core',
-          '1.0.4'
+          '1.1.0'
         )}/nodelibs/${filename}`,
         relativeInstallPath: `@jspm/core@1.0.4/nodelibs/${filename}`,
         dependencies: null,
