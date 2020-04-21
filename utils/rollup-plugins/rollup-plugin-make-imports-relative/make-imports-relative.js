@@ -1,23 +1,18 @@
-"use strict";
+'use strict';
 
-const path = require("path");
+const path = require('path');
 
-const modulesToSkip = new Set(["fs", "module"]);
+const modulesToSkip = new Set(['fs', 'module']);
 
 function isGlobalModule(path) {
   if (!path) return false;
   return /[a-zA-Z0-9@]/.test(path[0]);
 }
 
-function makeImportsRelative({
-  inputFilePath,
-  moduleInfo,
-  importPrefix,
-  dependencyMap,
-}) {
+function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependencyMap }) {
   let options = null;
   return {
-    name: "granular-imports",
+    name: 'granular-imports',
     options(currentOptions) {
       options = currentOptions;
       // console.log("options", options);
@@ -33,17 +28,17 @@ function makeImportsRelative({
 
       try {
         if (options.input.indexOf(lib) === -1 && isGlobalModule(lib)) {
-          libPath = lib.split("/");
+          libPath = lib.split('/');
 
           libName = libPath.shift();
 
           // if lib name starts with @ symbol
           // it is in format "@groupName/libName"
-          if (libName[0] === "@") {
-            libName += "/" + libPath.shift();
+          if (libName[0] === '@') {
+            libName += '/' + libPath.shift();
           }
 
-          libPath = libPath.join("/");
+          libPath = libPath.join('/');
 
           const libMapKey =
             moduleInfo && moduleInfo.dependencies
@@ -56,7 +51,7 @@ function makeImportsRelative({
           let libInfo = libMapKey ? dependencyMap.get(libMapKey) : null;
 
           if (!libInfo) {
-            const nodeInternalLibs = dependencyMap.get("node");
+            const nodeInternalLibs = dependencyMap.get('node');
             isNodeInternalLib = true;
             libInfo = nodeInternalLibs.get(libName);
           }
@@ -73,8 +68,8 @@ function makeImportsRelative({
 
           let nextSource = path.join(
             importPrefix,
-            `${libInfo.relativeDestinationPath}${libPath ? "/" + libPath : ""}${
-              libPath || isNodeInternalLib ? "" : "/index.js"
+            `${libInfo.importPath}${libPath ? '/' + libPath : ''}${
+              libPath || isNodeInternalLib ? '' : '/index.js'
             }`
           );
 
@@ -86,7 +81,7 @@ function makeImportsRelative({
         }
         return null;
       } catch (error) {
-        console.error("makeImportsRelative -> resolveId", error);
+        console.error('makeImportsRelative -> resolveId', error);
         return { id: libName, external: true };
       }
     },

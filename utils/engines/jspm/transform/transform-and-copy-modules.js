@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { calcDependencyDepth } = require('../tools/jspm-dependency-depth');
-const {
-  generateModuleName,
-} = require('../../../naming-utils/generate-module-name.js');
+const { generateModuleName } = require('../../../naming-utils/generate-module-name.js');
 const { checkMvnInstalled } = require('../../utils/generate-mvn-repo.js');
 /**
  *
@@ -12,12 +10,12 @@ const { checkMvnInstalled } = require('../../utils/generate-mvn-repo.js');
 function transformAndCopyModules() {
   const engine = this;
 
+  const { jspmCoreVersion } = engine;
+
   const { installedModulesPath, jspmJSON } = engine;
 
   if (!fs.existsSync(installedModulesPath)) {
-    throw new Error(
-      `can not find "jspm_packages" on path "${installedModulesPath}"`
-    );
+    throw new Error(`can not find "jspm_packages" on path "${installedModulesPath}"`);
   }
 
   const modulesMap = calcDependencyDepth(jspmJSON);
@@ -29,26 +27,28 @@ function transformAndCopyModules() {
   modulesMap.set('node', nodeInternalModulesMap);
 
   fs.readdirSync(
-    path.join(installedModulesPath, 'npm/@jspm/core@1.1.0/nodelibs'),
+    path.join(installedModulesPath, `npm/@jspm/core@${jspmCoreVersion}/nodelibs`),
     'utf8'
   )
     .filter((filename) => path.extname(filename) === '.js')
     .forEach((filename) => {
-      const filenameNoExtension = path.basename(
-        filename,
-        path.extname(filename)
-      );
+      const filenameNoExtension = path.basename(filename, path.extname(filename));
       nodeInternalModulesMap.set(filenameNoExtension, {
         fullName: null,
         group: 'npm',
         name: `@jspm/core/${filenameNoExtension}`,
-        version: '1.1.0',
+        version: jspmCoreVersion,
         relativeDestinationPath: `${generateModuleName(
           'jspm',
           'core',
-          '1.1.0'
+          jspmCoreVersion
         )}/nodelibs/${filename}`,
-        relativeInstallPath: `@jspm/core@1.0.4/nodelibs/${filename}`,
+        importPath: `${generateModuleName(
+          'jspm',
+          'core',
+          jspmCoreVersion.split('.').slice(0, -1).join('.')
+        )}/nodelibs/${filename}`,
+        relativeInstallPath: `@jspm/core@${jspmCoreVersion}/nodelibs/${filename}`,
         dependencies: null,
         nestedDependencyLevel: 0,
       });
@@ -74,6 +74,8 @@ function transformAndCopyModules() {
       engine.addPomXml(moduleInfo);
       if (mvnInstalled) engine.copyToMvnRepo(moduleInfo);
     });
+
+  return modulesMap;
 }
 
 exports.transformAndCopyModules = transformAndCopyModules;
