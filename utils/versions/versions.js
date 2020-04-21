@@ -28,10 +28,8 @@ function getPomVersionFormat(arr, resolved) {
     }
   });
   resp.push(`[${range.min}, ${range.max})`);
-  if (outOf.length > 1)
-    resp = [...resp, ...getPomVersionFormat(outOf, resolved)];
-  if (outOf.length == 1)
-    resp = [...resp, ...outOf.map((o) => `[${o.min}, ${o.max})`)];
+  if (outOf.length > 1) resp = [...resp, ...getPomVersionFormat(outOf, resolved)];
+  if (outOf.length == 1) resp = [...resp, ...outOf.map((o) => `[${o.min}, ${o.max})`)];
   return resp;
 }
 
@@ -85,10 +83,7 @@ function getPomRange(range, resolved) {
     if (range.startsWith('~')) {
       minMax.min = normalizeVersion(range.substring(1));
       const part = minMax.min.split('.');
-      minMax.max =
-        part[1] == 0 && part[2] == 0
-          ? nextMajor(minMax.min)
-          : nextMinor(minMax.min);
+      minMax.max = part[1] == 0 && part[2] == 0 ? nextMajor(minMax.min) : nextMinor(minMax.min);
       return minMax;
     }
     //  Hyphen Ranges X.Y.Z - A.B.C
@@ -202,7 +197,7 @@ function getGroupAndArt(name) {
     };
   } else {
     return {
-      group: Constants.DEFAULT_GROUP,
+      group: Constants.DEFAULT_GROUP_FOR_3RD_PARTY,
       artifact: parts[0],
     };
   }
