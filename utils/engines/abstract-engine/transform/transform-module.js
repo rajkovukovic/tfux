@@ -1,14 +1,9 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require("path");
-const {
-  generateTransformList,
-} = require("../../utils/generate-transform-list.js");
-const {
-  moduleInfoToFolderName,
-} = require("../../../naming-utils/generate-module-name.js");
-const { copyFiles } = require("../../../filesystem/copy-files.js");
+const fs = require('fs');
+const path = require('path');
+const { generateTransformList } = require('../../utils/generate-transform-list.js');
+const { copyFiles } = require('../../../filesystem/copy-files.js');
 
 /**
  *
@@ -20,15 +15,9 @@ const { copyFiles } = require("../../../filesystem/copy-files.js");
 async function transformModule(moduleInfo, dependencyMap, force = true) {
   const engine = this;
 
-  const modulePath = path.join(
-    engine.installedModulesPath,
-    moduleInfo.relativeInstallPath
-  );
+  const modulePath = path.join(engine.installedModulesPath, moduleInfo.relativeInstallPath);
 
-  const destinationPath = path.join(
-    engine.destinationPath,
-    moduleInfo.relativeDestinationPath
-  );
+  const destinationPath = path.join(engine.destinationPath, moduleInfo.relativeDestinationPath);
 
   // console.log({
   //   moduleInfo,

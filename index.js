@@ -2,15 +2,51 @@
 
 "use strict";
 
-const { install } = require("./utils/install/install.js");
-const { CLI_TOOL_NAME, ENGINE_TYPES } = require("./utils/constants/constants.js");
+const path = require("path");
+const commandLineArgs = require("command-line-args");
+const { installGlobally } = require("./utils/install/install-globally.js");
+const {
+  CLI_TOOL_NAME,
+  ENGINE_TYPES,
+} = require("./utils/constants/constants.js");
+const { initProject } = require("./utils/init-project/init-project.js");
 
-function main(command, args) {
+function main(command, argv) {
   switch (command) {
-    case "add":
+    case "create":
+    case "init":
+      const { _unknown: projectNames = [], ...restOptions } = commandLineArgs(
+        [
+          { name: "deps", alias: "d", type: String, multiple: true },
+          { name: "editor", type: Boolean }, // should launch a code editor
+          { name: "jsx", type: Boolean },
+          { name: "svelte", type: Boolean },
+          { name: "vue", type: Boolean },
+          { name: "typescript", alias: "t", type: Boolean },
+        ],
+        { argv, partial: true }
+      );
+      if (command === "create" && projectNames.length === 0)
+        throw new Error("create command must be followed by project name");
+      else if (command === "create" && projectNames.length > 1)
+        throw new Error(
+          `create command must be followed by only one project name. got ${JSON.stringify(
+            projectNames
+          )}`
+        );
+
+      initProject(
+        path.join(process.cwd(), command === "create" ? projectNames[0] : ""),
+        restOptions
+      );
+      break;
     case "i":
     case "install":
-      install(ENGINE_TYPES.jspm, args[0]);
+      const { _unknown: dependencies = [], global } = commandLineArgs(
+        [{ name: "global", alias: "g", type: Boolean }],
+        { argv, partial: true }
+      );
+      installGlobally(argv[0]);
       break;
     case undefined:
       console.error(`${CLI_TOOL_NAME} needs a command to run`);

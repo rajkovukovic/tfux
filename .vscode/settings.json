@@ -1,5 +1,7 @@
 {
-  "cSpell.words": [
-    "vatra"
-  ]
+  "cSpell.words": ["vatra"],
+  "editor.formatOnSave": true,
+  "prettier.printWidth": 100,
+  "editor.rulers": [100],
+  "prettier.singleQuote": true
 }

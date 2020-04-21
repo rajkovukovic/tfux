@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 const {
   CLI_TOOL_NAME,
   ENGINE_TYPES,
   VATRA_LIB_PATH,
   TMP_DIR,
-} = require("../constants/constants.js");
-const { JspmEngine } = require("../engines/jspm/jspm.js");
-const { NpmEngine } = require("../engines/npm/npm.js");
+} = require('../constants/constants.js');
+const { JspmEngine } = require('../engines/jspm/jspm.js');
+const { NpmEngine } = require('../engines/npm/npm.js');
 
 const engineFactories = {
   [ENGINE_TYPES.jspm]: JspmEngine,
   [ENGINE_TYPES.npm]: NpmEngine,
 };
 
-async function install(engineName, dependencyOrDependencies) {
+async function installGlobally(dependencyOrDependencies, engineName = ENGINE_TYPES.jspm) {
   console.log({ VATRA_LIB_PATH, TMP_DIR });
   if (!engineName || !engineFactories[engineName])
     throw new Error(
@@ -29,19 +29,14 @@ async function install(engineName, dependencyOrDependencies) {
 
   const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR);
 
-  console.log(
-    `${CLI_TOOL_NAME} is installing ${JSON.stringify(dependencyArray)}`
-  );
+  console.log(`${CLI_TOOL_NAME} is installing ${JSON.stringify(dependencyArray)}`);
 
   try {
     // install dependency to TMP folder
-    await engine.installDependencies(dependencyArray, true);
-
-    // make dependencies vatra compatible and copy them to the vatra lib
-    await engine.transformAndCopyModules();
+    return await engine.installDependencies(dependencyArray, true);
   } catch (error) {
-    console.error("\x1b[31m", error);
+    console.error('\x1b[31m', error);
   }
 }
 
-exports.install = install;
+exports.installGlobally = installGlobally;

@@ -1,16 +1,12 @@
-"use strict";
+'use strict';
 
-const { parseJspmJSONDependency } = require("./parse-jspm.js");
-const {
-  generateModuleName,
-} = require("../../../naming-utils/generate-module-name.js");
+const { parseJspmJSONDependency } = require('./parse-jspm.js');
+const { generateModuleName } = require('../../../naming-utils/generate-module-name.js');
 
 function calcOneDependencyDepth(dependencyMap, dependencyName) {
   const dependency = dependencyMap.get(dependencyName);
   if (!dependency) {
-    throw new Error(
-      `Can not find dependency "${dependencyName}" in dependencyMap`
-    );
+    throw new Error(`Can not find dependency "${dependencyName}" in dependencyMap`);
   }
   if (dependency && Number.isFinite(dependency.nestedDependencyLevel)) {
     return dependency.nestedDependencyLevel;
@@ -20,9 +16,7 @@ function calcOneDependencyDepth(dependencyMap, dependencyName) {
   } else {
     dependency.nestedDependencyLevel =
       Math.max(
-        ...dependency.dependencies.map((depName) =>
-          calcOneDependencyDepth(dependencyMap, depName)
-        )
+        ...dependency.dependencies.map((depName) => calcOneDependencyDepth(dependencyMap, depName))
       ) + 1;
   }
 
@@ -40,7 +34,8 @@ function calcDependencyDepth(jspmJSON) {
       name,
       version,
       relativeDestinationPath: generateModuleName(group, name, version),
-      relativeInstallPath: `${group ? group + "/" : ""}${name}@${version}`,
+      importPath: generateModuleName(group, name, version.split('.').slice(0, -1).join('.')),
+      relativeInstallPath: `${group ? group + '/' : ''}${name}@${version}`,
       dependencies: info.resolve ? Object.values(info.resolve) : null,
       nestedDependencyLevel: null,
     });

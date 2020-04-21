@@ -3,13 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const { AbstractEngine } = require('../abstract-engine/abstract-engine.js');
-const {
-  transformAndCopyModules,
-} = require('./transform/transform-and-copy-modules.js');
+const { transformAndCopyModules } = require('./transform/transform-and-copy-modules.js');
 const { transformJsFile } = require('./transform/transform-js-file.js');
-const {
-  installDependenciesWithPeer,
-} = require('./install/install-dependencies-with-peer.js');
+const { installDependenciesWithPeer } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
 
 class JspmEngine extends AbstractEngine {
@@ -17,25 +13,22 @@ class JspmEngine extends AbstractEngine {
     super(...args);
 
     this._installedModulesRootPath = this._installedModulesPath;
-    this._installedModulesPath = path.join(
-      this._installedModulesPath,
-      'jspm_packages'
-    );
+    this._installedModulesPath = path.join(this._installedModulesPath, 'jspm_packages');
 
     this.transformAndCopyModules = transformAndCopyModules.bind(this);
     this.transformJsFile = transformJsFile.bind(this);
   }
 
-  installDependencies(dependencies, recursively = false) {
-    installDependenciesWithPeer(this, dependencies, recursively, new Set());
+  async installDependencies(dependencies, installTransitiveDependencies = true) {
+    installDependenciesWithPeer(this, dependencies, installTransitiveDependencies, new Set());
+    // make dependencies vatra compatible and copy them to the global vatra lib
+    return await this.transformAndCopyModules();
   }
 
   reloadJspmJSON() {
     const jspmJSONPath = path.join(this._installedModulesRootPath, 'jspm.json');
     if (!fs.existsSync(jspmJSONPath)) {
-      throw new Error(
-        `can not find "jspm.json" on path "${this.installedModulesPath}"`
-      );
+      throw new Error(`can not find "jspm.json" on path "${this.installedModulesPath}"`);
     }
     this._jspmJSON = require(jspmJSONPath);
     return this._jspmJSON;
@@ -46,35 +39,33 @@ class JspmEngine extends AbstractEngine {
     return this._jspmJSON;
   }
 
+  get jspmCoreVersion() {
+    return this.jspmJSON.resolve['@jspm/core'].split('@').pop();
+  }
+
   saveJspmJSON() {
     const jspmJSONPath = path.join(this._installedModulesRootPath, 'jspm.json');
-    fs.writeFileSync(
-      jspmJSONPath,
-      JSON.stringify(this.jspmJSON, null, 2),
-      'utf8'
-    );
+    fs.writeFileSync(jspmJSONPath, JSON.stringify(this.jspmJSON, null, 2), 'utf8');
   }
 
   addPomXml(moduleInfo) {
     const pom = returnPomXml({
       [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
     });
+    console.log({
+      pom,
+      deps: {
+        [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
+      },
+    });
     if (pom) {
       fs.writeFile(
-        path.join(
-          this.destinationPath,
-          moduleInfo.relativeDestinationPath,
-          'pom.xml'
-        ),
+        path.join(this.destinationPath, moduleInfo.relativeDestinationPath, 'pom.xml'),
         pom,
-        (err) =>
-          (err && console.error(err)) ||
-          console.log(`### Finished writing pom.xml File`)
+        (err) => (err && console.error(err)) || console.log(`### Finished writing pom.xml File`)
       );
     } else {
-      console.log(
-        `Pom file can not be generated for ${moduleInfo.fullName} !!!`
-      );
+      console.log(`Pom file can not be generated for ${moduleInfo.fullName} !!!`);
     }
   }
 }
