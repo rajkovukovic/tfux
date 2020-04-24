@@ -4,7 +4,8 @@ const os = require('os');
 const path = require('path');
 const untildify = require('untildify');
 
-const { name: CLI_TOOL_NAME } = require('../../package.json');
+const PACKAGE_JSON = require('../../package.json');
+const CLI_TOOL_NAME = PACKAGE_JSON.name;
 const NODE_MODULES_PATH = path.join(
   require.resolve('jspm').split('/node_modules/')[0],
   'node_modules'
@@ -38,6 +39,7 @@ const PROJECT_TEMPLATE_OPTIONS = {
   vue: 'vue',
 };
 
+exports.PACKAGE_JSON = PACKAGE_JSON;
 exports.CLI_TOOL_NAME = CLI_TOOL_NAME;
 exports.JSPM_BIN_PATH = JSPM_BIN_PATH;
 exports.CWD = CWD;
