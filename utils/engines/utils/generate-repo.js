@@ -8,16 +8,15 @@ const untildify = require('untildify');
 const mkdirp = require('mkdirp');
 const config = require('../../../vatra.config.json');
 const xml2js = require('xml2js');
-const UglifyES = require('uglify-es');
+const UglifyES = require('terser');
 const {
   GROUP_SEPARATOR,
   VERSION_SEPARATOR,
   VATRA_LIB_PATH,
+  VATRA_PATH,
 } = require('../../constants/constants.js');
 const { getGroupAndArt } = require('../../versions/versions');
-const {
-  parseJspmJSONDependency,
-} = require('../../engines/jspm/tools/parse-jspm.js');
+const { parseJspmJSONDependency } = require('../jspm/tools/parse-jspm.js');
 const M2_DEFAULT = '~/.m2';
 const MVN_SETTINGS_DEFAULT = 'settings.xml';
 
@@ -67,13 +66,26 @@ function getMvnRepositoryPath() {
   }
 }
 
-function zipAndCopyToRepo(name) {
+function getMvnPath(versionDep, depVersionParts, mvnPath) {
+  const groupParts = versionDep.group.split(GROUP_SEPARATOR);
+  groupParts.forEach((p) => (mvnPath = path.join(mvnPath, p)));
+  return path.join(mvnPath, versionDep.artifact, depVersionParts[2]);
+}
+
+function zipAndCopyToRepo(name, options) {
   const depVersionParts = parseJspmJSONDependency(name);
   const versionDep = getGroupAndArt(depVersionParts[1]);
-  const groupParts = versionDep.group.split(GROUP_SEPARATOR);
-  let pathToRepo = getMvnRepositoryPath();
-  groupParts.forEach((p) => (pathToRepo = path.join(pathToRepo, p)));
-  pathToRepo = path.join(pathToRepo, versionDep.artifact, depVersionParts[2]);
+
+  const pathToRepo = options.zipPath
+    ? options.zipPath
+    : options.mvn
+    ? getMvnPath(versionDep, depVersionParts, options.mvn)
+    : path.join(
+        VATRA_PATH,
+        'repository',
+        `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`
+      );
+  console.log({ pathToRepo });
   // create repo
   createDirPath(pathToRepo);
   // Copy pom.xml
@@ -116,9 +128,7 @@ function zipFolder(sourcePath, pathToZip) {
 
   output.on('close', function () {
     console.log(archive.pointer() + ' total bytes');
-    console.log(
-      'archiver has been finalized and the output file descriptor has closed.'
-    );
+    console.log('archiver has been finalized and the output file descriptor has closed.');
   });
 
   output.on('end', function () {
@@ -150,9 +160,7 @@ function minZipFolder(sourcePath, pathToZip, zipRoot) {
 
   output.on('close', function () {
     console.log(archive.pointer() + ' total bytes');
-    console.log(
-      'archiver has been finalized and the output file descriptor has closed.'
-    );
+    console.log('archiver has been finalized and the output file descriptor has closed.');
   });
 
   output.on('end', function () {
@@ -178,9 +186,15 @@ function minZipFolder(sourcePath, pathToZip, zipRoot) {
     const ext = ['js', 'mjs', 'css'];
     if (ext.find((e) => f.name.split('.').pop() === e)) {
       //minify
-      // console.log(f.fullName);
       const min = minify(f.fullName);
-      archive.append(min.code, { name: f.fullName.split(zipRoot).pop() });
+      if (min.error) {
+        // uglify error
+        console.error({ file: f.fullName, error: min.error.message });
+        archive.file(f.fullName, { name: f.fullName.split(zipRoot).pop() });
+      } else {
+        // if (min.warnings) console.warn({ file: f.fullName, warn: min.warnings });
+        archive.append(min.code, { name: f.fullName.split(zipRoot).pop() });
+      }
     } else {
       archive.file(f.fullName, { name: f.fullName.split(zipRoot).pop() });
     }
@@ -211,12 +225,15 @@ const minify = function (file) {
       toplevel: true,
       compress: {
         passes: 2,
+        drop_console: true,
+        module: true,
       },
       output: {
         beautify: false,
-        preamble: '/* uglified */',
+        // preamble: '/* uglified */',
       },
       warnings: true,
+      module: true,
     };
 
     const codeString = fs.readFileSync(untildify(file), 'utf-8').toString();
