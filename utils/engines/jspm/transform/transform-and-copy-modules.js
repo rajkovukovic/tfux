@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const { calcDependencyDepth } = require('../tools/jspm-dependency-depth');
 const { generateModuleName } = require('../../../naming-utils/generate-module-name.js');
-const { checkMvnInstalled } = require('../../utils/generate-mvn-repo.js');
 /**
  *
  * @param {PackageManagerEngine} this - implicit attribute
@@ -54,25 +53,12 @@ function transformAndCopyModules() {
       });
     });
 
-  // console.log({ nodeInternalModulesMap });
-  let mvnInstalled = true;
-  checkMvnInstalled()
-    .then((resp) => {
-      if (!resp) {
-        mvnInstalled = false;
-        console.warn(
-          'MVN are not installed. Please install maven to synchronize libs with local maven repository!!!'
-        );
-      }
-    })
-    .catch((error) => console.error(error));
-
   modulesToTransform
     .sort((a, b) => a.nestedDependencyLevel - b.nestedDependencyLevel)
     .forEach((moduleInfo) => {
       engine.transformModule(moduleInfo, modulesMap);
       engine.addPomXml(moduleInfo);
-      if (mvnInstalled) engine.copyToMvnRepo(moduleInfo);
+      engine.copyToRepo(moduleInfo);
     });
 
   return modulesMap;

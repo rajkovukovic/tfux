@@ -8,17 +8,14 @@ const { transformModule } = require('./transform/transform-module.js');
 class AbstractEngine {
   _destinationPath;
   _installedModulesPath;
+  _options;
 
-  constructor(destinationPath, installedModulesPath) {
+  constructor(destinationPath, installedModulesPath, options) {
     if (!destinationPath)
-      throw new Error(
-        'destinationPath is a required param for PackageManagerEngine'
-      );
+      throw new Error('destinationPath is a required param for PackageManagerEngine');
 
     if (!installedModulesPath)
-      throw new Error(
-        'installedModulesPath is a required param for PackageManagerEngine'
-      );
+      throw new Error('installedModulesPath is a required param for PackageManagerEngine');
 
     // create destination path if not exists
     if (!fs.existsSync(destinationPath)) {
@@ -33,6 +30,7 @@ class AbstractEngine {
 
     this._destinationPath = destinationPath;
     this._installedModulesPath = installedModulesPath;
+    this._options = options;
 
     this.transformModule = transformModule.bind(this);
   }
@@ -69,7 +67,7 @@ class AbstractEngine {
     );
   }
 
-  copyToMvnRepo() {
+  copyToRepo() {
     throw new Error(
       'copyToMvnRepo is an abstract method that needs to be implemented by a derived class'
     );

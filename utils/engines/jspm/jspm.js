@@ -7,7 +7,7 @@ const { transformAndCopyModules } = require('./transform/transform-and-copy-modu
 const { transformJsFile } = require('./transform/transform-js-file.js');
 const { installDependenciesWithPeer } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
-const { zipAndCopyToRepo } = require('../utils/generate-mvn-repo.js');
+const { zipAndCopyToRepo } = require('../utils/generate-repo.js');
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -71,8 +71,8 @@ class JspmEngine extends AbstractEngine {
     }
   }
 
-  copyToMvnRepo(moduleInfo) {
-    zipAndCopyToRepo(moduleInfo.fullName);
+  copyToRepo(moduleInfo) {
+    zipAndCopyToRepo(moduleInfo.fullName, this._options);
   }
 }
 
