@@ -53,19 +53,6 @@ function transformAndCopyModules() {
       });
     });
 
-  // console.log({ nodeInternalModulesMap });
-  // let mvnInstalled = true;
-  // checkMvnInstalled()
-  //   .then((resp) => {
-  //     if (!resp) {
-  //       mvnInstalled = false;
-  //       console.warn(
-  //         'MVN are not installed. Please install maven to synchronize libs with local maven repository!!!'
-  //       );
-  //     }
-  //   })
-  //   .catch((error) => console.error(error));
-
   modulesToTransform
     .sort((a, b) => a.nestedDependencyLevel - b.nestedDependencyLevel)
     .forEach((moduleInfo) => {
