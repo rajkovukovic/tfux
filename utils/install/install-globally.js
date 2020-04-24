@@ -14,7 +14,7 @@ const engineFactories = {
   [ENGINE_TYPES.npm]: NpmEngine,
 };
 
-async function installGlobally(dependencyOrDependencies, engineName = ENGINE_TYPES.jspm) {
+async function installGlobally(dependencyOrDependencies, options, engineName = ENGINE_TYPES.jspm) {
   console.log({ VATRA_LIB_PATH, TMP_DIR });
   if (!engineName || !engineFactories[engineName])
     throw new Error(
@@ -27,7 +27,7 @@ async function installGlobally(dependencyOrDependencies, engineName = ENGINE_TYP
     ? dependencyOrDependencies
     : [dependencyOrDependencies];
 
-  const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR);
+  const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR, options);
 
   console.log(`${CLI_TOOL_NAME} is installing ${JSON.stringify(dependencyArray)}`);
 
