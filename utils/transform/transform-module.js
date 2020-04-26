@@ -1,10 +1,11 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require("path");
-const { generateTransformList } = require("./generate-transform-list");
-const { copyFiles } = require("../filesystem/copy-files");
-const { transformJsFile } = require("./transform-js-file");
+const fs = require('fs');
+const path = require('path');
+const { logger } = require('../logger/logger.js');
+const { generateTransformList } = require('./generate-transform-list');
+const { copyFiles } = require('../filesystem/copy-files');
+const { transformJsFile } = require('./transform-js-file');
 
 /**
  *
@@ -21,17 +22,13 @@ async function transformModule(
   dependencyMap,
   force = true
 ) {
-
   const modulePath = path.join(
     installedModulesPath,
-    moduleInfo.group || "npm",
+    moduleInfo.group || 'npm',
     `${moduleInfo.name}@${moduleInfo.version}`
   );
 
-  const destinationPath = path.join(
-    modulesDestinationPath,
-    moduleInfo.relativeInstallPath
-  );
+  const destinationPath = path.join(modulesDestinationPath, moduleInfo.relativeInstallPath);
 
   // if already exists in destination path do not install again
   // except if force is true
@@ -44,7 +41,7 @@ async function transformModule(
     if (!moduleInfo.dependencies) {
       copyFiles(modulePath, jsFiles, destinationPath);
     } else {
-      // console.log({
+      // logger.info({
       //   modulePath,
       //   destinationPath,
       //   jsFiles: jsFiles.length,
@@ -57,7 +54,7 @@ async function transformModule(
           modulePath,
           moduleInfo,
           jsFile,
-          dependencyMap
+          dependencyMap,
         });
       }
     }

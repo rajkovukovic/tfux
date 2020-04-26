@@ -1,58 +1,47 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const childProcess = require("child_process");
-const { JSPM_BIN_PATH } = require("../../../constants/constants.js");
-const { parseJspmJSONDependency } = require("../tools/parse-jspm.js");
+const path = require('path');
+const childProcess = require('child_process');
+const { JSPM_BIN_PATH } = require('../../../constants/constants.js');
+const { parseJspmJSONDependency } = require('../tools/parse-jspm.js');
+const { logger } = require('../../../logger/logger.js');
 
 function jspmFormatDependencies(dependencyMap) {
   return Object.entries(dependencyMap)
-    .filter(([moduleName]) => moduleName !== "@jspm/core")
+    .filter(([moduleName]) => moduleName !== '@jspm/core')
     .map(([_, moduleJspmName]) => moduleJspmName);
 }
 
 function packageJsonFormatDependencies(dependencyMap) {
   return Object.entries(dependencyMap)
-    .filter(([moduleName]) => moduleName !== "@jspm/core")
+    .filter(([moduleName]) => moduleName !== '@jspm/core')
     .map(([moduleName, moduleVersion]) => `${moduleName}@${moduleVersion}`);
 }
 
-function installPeerDependenciesIfAny(
-  engine,
-  moduleJspmName,
-  checkedDependencies
-) {
+function installPeerDependenciesIfAny(engine, moduleJspmName, checkedDependencies) {
   if (!checkedDependencies.has(moduleJspmName)) {
-    console.log("installPeerDependenciesIfAny", moduleJspmName);
+    logger.info('installPeerDependenciesIfAny', moduleJspmName);
     checkedDependencies.add(moduleJspmName);
 
     const packageJson = require(path.join(
       engine.installedModulesPath,
-      moduleJspmName.split(":").join("/"),
-      "package.json"
+      moduleJspmName.split(':').join('/'),
+      'package.json'
     ));
 
-    const peerDependencies = packageJsonFormatDependencies(
-      packageJson.peerDependencies
-    );
+    const peerDependencies = packageJsonFormatDependencies(packageJson.peerDependencies);
 
     if (peerDependencies.length > 0) {
-      installDependenciesWithPeer(
-        engine,
-        peerDependencies,
-        true,
-        checkedDependencies
-      );
+      installDependenciesWithPeer(engine, peerDependencies, true, checkedDependencies);
       const { jspmJSON } = engine;
       // const parentName = parseJspmJSONDependency(moduleJspmName)[1];
       peerDependencies.forEach((peerDep) => {
         const peerDepName = parseJspmJSONDependency(peerDep)[1];
-        console.log({ moduleJspmName });
-        console.log(
+        logger.info({ moduleJspmName });
+        logger.info(
           `\n\n\nWriting: jspmJSON.dependencies.${moduleJspmName}.resolve.${peerDepName} = jspmJSON.resolve.${peerDepName} (${jspmJSON.resolve[peerDepName]})\n\n\n`
         );
-        jspmJSON.dependencies[moduleJspmName].resolve[peerDepName] =
-          jspmJSON.resolve[peerDepName];
+        jspmJSON.dependencies[moduleJspmName].resolve[peerDepName] = jspmJSON.resolve[peerDepName];
       });
       engine.saveJspmJSON();
     }
@@ -64,7 +53,7 @@ function installPeerDependenciesIfAny(
         JSON.stringify(jspmFormatDependencies(moduleJspmInfo.resolve))
       );
 
-      console.log({
+      logger.info({
         transitive: true,
         moduleJspmName,
         transitiveDeps,
@@ -72,7 +61,7 @@ function installPeerDependenciesIfAny(
       });
 
       transitiveDeps.forEach((name) => {
-        console.log({ transitiveDeps, name });
+        logger.info({ transitiveDeps, name });
         installPeerDependenciesIfAny(engine, name, checkedDependencies);
       });
     }
@@ -86,11 +75,9 @@ function installDependenciesWithPeer(
   checkedDependencies
 ) {
   childProcess.execSync(
-    `cd ${
-      engine._installedModulesRootPath
-    } && ${JSPM_BIN_PATH} install ${dependencies.join(" ")}`,
+    `cd ${engine._installedModulesRootPath} && ${JSPM_BIN_PATH} install ${dependencies.join(' ')}`,
     {
-      stdio: "inherit",
+      stdio: 'inherit',
     }
   );
 
@@ -98,7 +85,7 @@ function installDependenciesWithPeer(
 
   if (installTransitiveDependencies) {
     const modules = jspmFormatDependencies(engine.jspmJSON.resolve);
-    console.log({ modules });
+    logger.info({ modules });
 
     modules.forEach((name) => {
       installPeerDependenciesIfAny(engine, name, checkedDependencies);

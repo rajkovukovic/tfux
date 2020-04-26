@@ -6,11 +6,8 @@ const mkdirp = require('mkdirp');
 const { copyFolder } = require('../filesystem/copy-folder.js');
 const { installGlobally } = require('../install/install-globally.js');
 const { linkDependencies } = require('../link-dependencies/link-dependencies.js');
-const {
-  DEFAULT_GROUP_FOR_NEW_PROJECT,
-  PROJECT_TEMPLATE_OPTIONS,
-  VATRA_TEMPLATES_PATH,
-} = require('../constants/constants.js');
+const { logger } = require('../logger/logger.js');
+const { PROJECT_TEMPLATE_OPTIONS, VATRA_TEMPLATES_PATH } = require('../constants/constants.js');
 
 const frameworkOptions = [PROJECT_TEMPLATE_OPTIONS.svelte, PROJECT_TEMPLATE_OPTIONS.vue];
 
@@ -79,7 +76,7 @@ async function initProject(destinationPath, { deps: dependencies, editor, ...res
     // create POM file
     fs.writeFileSync(path.join(destinationPath, 'pom.xml'), '', 'utf8');
   } catch (error) {
-    console.log(error.trace);
+    logger.info(error.trace);
   }
 }
 

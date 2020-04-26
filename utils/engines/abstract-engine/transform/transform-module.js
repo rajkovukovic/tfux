@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { logger } = require('../../../logger/logger.js');
 const { generateTransformList } = require('../../utils/generate-transform-list.js');
 const { copyFiles } = require('../../../filesystem/copy-files.js');
 
@@ -19,7 +20,7 @@ async function transformModule(moduleInfo, dependencyMap, force = true) {
 
   const destinationPath = path.join(engine.destinationPath, moduleInfo.relativeDestinationPath);
 
-  // console.log({
+  // logger.info({
   //   moduleInfo,
   //   modulePath,
   //   destinationPath,
@@ -36,7 +37,7 @@ async function transformModule(moduleInfo, dependencyMap, force = true) {
     if (!moduleInfo.dependencies) {
       copyFiles(modulePath, jsFiles, destinationPath);
     } else {
-      // console.log({
+      // logger.info({
       //   modulePath,
       //   destinationPath,
       //   jsFiles: jsFiles.length,

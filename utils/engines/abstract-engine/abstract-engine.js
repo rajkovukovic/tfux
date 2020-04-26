@@ -3,6 +3,7 @@
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
+const { last } = require('lodash');
 const { transformModule } = require('./transform/transform-module.js');
 
 class AbstractEngine {

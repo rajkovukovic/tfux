@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const { logger } = require('../../logger/logger.js');
 
 const modulesToSkip = new Set(['fs', 'module']);
 
@@ -15,7 +16,7 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
     name: 'granular-imports',
     options(currentOptions) {
       options = currentOptions;
-      // console.log("options", options);
+      // logger.info("options", options);
     },
     resolveId(lib) {
       if (modulesToSkip.has(lib)) {
@@ -73,7 +74,7 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
             }`
           );
 
-          // console.log("make-imports-relative replacing", {
+          // logger.info("make-imports-relative replacing", {
           //   lib,
           //   nex: nextSource,
           // });
@@ -81,7 +82,7 @@ function makeImportsRelative({ inputFilePath, moduleInfo, importPrefix, dependen
         }
         return null;
       } catch (error) {
-        console.error('makeImportsRelative -> resolveId', error);
+        logger.error('makeImportsRelative -> resolveId', error);
         return { id: libName, external: true };
       }
     },

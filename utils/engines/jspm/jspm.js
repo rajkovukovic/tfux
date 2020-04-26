@@ -8,6 +8,7 @@ const { transformJsFile } = require('./transform/transform-js-file.js');
 const { installDependenciesWithPeer } = require('./install/install-dependencies-with-peer.js');
 const { returnPomXml } = require('../../versions/pom.js');
 const { zipAndCopyToRepo } = require('../utils/generate-repo.js');
+const { logger } = require('../../logger/logger.js');
 
 class JspmEngine extends AbstractEngine {
   constructor(...args) {
@@ -53,7 +54,7 @@ class JspmEngine extends AbstractEngine {
     const pom = returnPomXml({
       [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
     });
-    console.log({
+    logger.info({
       pom,
       deps: {
         [moduleInfo.fullName]: this.jspmJSON.dependencies[moduleInfo.fullName],
@@ -65,9 +66,9 @@ class JspmEngine extends AbstractEngine {
         pom,
         'utf8'
       );
-      console.log('Finished writing pom.xml File for ' + moduleInfo.relativeDestinationPath);
+      logger.info('Finished writing pom.xml File for ' + moduleInfo.relativeDestinationPath);
     } else {
-      console.log(`Pom file can not be generated for ${moduleInfo.fullName} !!!`);
+      logger.info(`Pom file can not be generated for ${moduleInfo.fullName} !!!`);
     }
   }
 

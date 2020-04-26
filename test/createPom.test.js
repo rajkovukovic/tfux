@@ -61,26 +61,14 @@ describe('Array', function () {
         const parser = new xml2js.Parser();
 
         parser.parseString(pom, function (err, result) {
-          assert.equal(
-            result.project.modelVersion[0],
-            '4.0.0',
-            'modelVersion is wrong!'
-          );
-          assert.equal(
-            result.project.groupId[0],
-            dep.expected.groupId,
-            'groupId is wrong!'
-          );
+          assert.equal(result.project.modelVersion[0], '4.0.0', 'modelVersion is wrong!');
+          assert.equal(result.project.groupId[0], dep.expected.groupId, 'groupId is wrong!');
           assert.equal(
             result.project.artifactId[0],
             dep.expected.artifactId,
             'artifactId is wrong!'
           );
-          assert.equal(
-            result.project.version[0],
-            dep.expected.version,
-            'version is wrong!'
-          );
+          assert.equal(result.project.version[0], dep.expected.version, 'version is wrong!');
 
           dep.expected.dependencies > 0
             ? assert.equal(
