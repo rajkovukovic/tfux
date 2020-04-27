@@ -4,6 +4,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 const { transformModule } = require('./transform/transform-module.js');
+const { remove } = require('../utils/uninstall.js');
 
 class AbstractEngine {
   _destinationPath;
@@ -47,6 +48,11 @@ class AbstractEngine {
     throw new Error(
       'installDependencies is an abstract method that needs to be implemented by a derived class'
     );
+  }
+
+  uninstallDependencies(dependencyArray) {
+    console.log('Uninstall', dependencyArray);
+    remove(dependencyArray, this._options);
   }
 
   transformAndCopyModules() {

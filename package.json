@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha \"utils/**/*.test.js\""
+    "test": "mocha \"utils/**/*.test.js\"",
+    "test-file": "mocha"
   },
   "engines": {
     "node": ">=10.0"
