@@ -56,8 +56,7 @@ program
   .alias('u')
   .description('Uninstall packages')
   .arguments('[names...]')
-  .option('-g, --global', 'Install globally')
-  .option('-pom  --pom-path <dir>', "Path to repository. Default '.'")
+  .option('-pom  --pom-path <dir>', "Path to folder with pom.xml file. Default '.'")
   .action(uninstall);
 
 program
