@@ -40,7 +40,7 @@ To create a new project, run:
 hello-word jsx project will be created in hello-world folder.
 
 Use options to select different type of project eg. typescript, svelte or vue.
-To install dependencies for project use -d option and provide comma separated libraries names
+To install dependencies for project use -d option and provide comma separated libraries names.
 
 You can explore all options by running:
 
