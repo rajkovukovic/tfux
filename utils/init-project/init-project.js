@@ -7,7 +7,7 @@ const { copyFolder } = require('../filesystem/copy-folder.js');
 const { installGlobally } = require('../install/install-globally.js');
 const { linkDependencies } = require('../link-dependencies/link-dependencies.js');
 const { logger } = require('../logger/logger.js');
-const { PROJECT_TEMPLATE_OPTIONS, VATRA_TEMPLATES_PATH } = require('../constants/constants.js');
+const { PROJECT_TEMPLATE_OPTIONS } = require('../constants/constants.js');
 
 const frameworkOptions = [PROJECT_TEMPLATE_OPTIONS.svelte, PROJECT_TEMPLATE_OPTIONS.vue];
 
