@@ -9,7 +9,7 @@ const { linkDependencies } = require('../link-dependencies/link-dependencies.js'
 const {
   DEFAULT_GROUP_FOR_NEW_PROJECT,
   PROJECT_TEMPLATE_OPTIONS,
-  VATRA_TEMPLATES_PATH,
+  FIREX_TEMPLATES_PATH,
 } = require('../constants/constants.js');
 
 const frameworkOptions = [PROJECT_TEMPLATE_OPTIONS.svelte, PROJECT_TEMPLATE_OPTIONS.vue];
@@ -56,7 +56,7 @@ async function initProject(destinationPath, { deps: dependencies, editor, ...res
       .filter((option) => Boolean(restOptions[option]))
       .join('-');
     concatenatedOptions = concatenatedOptions || 'js';
-    const templatePath = path.join(VATRA_TEMPLATES_PATH, concatenatedOptions);
+    const templatePath = path.join(FIREX_TEMPLATES_PATH, concatenatedOptions);
 
     // copy project template files to destination dir
     if (fs.existsSync(templatePath)) {
