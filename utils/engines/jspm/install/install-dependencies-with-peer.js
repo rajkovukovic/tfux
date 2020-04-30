@@ -4,6 +4,7 @@ const path = require('path');
 const childProcess = require('child_process');
 const { JSPM_BIN_PATH } = require('../../../constants/constants.js');
 const { parseJspmJSONDependency } = require('../tools/parse-jspm.js');
+const { logger } = require('../../../logger/logger.js');
 
 function jspmFormatDependencies(dependencyMap) {
   return Object.entries(dependencyMap)

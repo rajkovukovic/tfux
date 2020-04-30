@@ -43,7 +43,7 @@ async function installGlobally(dependencyOrDependencies, options, engineName = E
     // install dependency to TMP folder
     return await engine.installDependencies(dependencyArray, true);
   } catch (error) {
-    logger.error(error.message);
+    logger.error(error.stack);
   }
 }
 

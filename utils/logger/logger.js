@@ -45,10 +45,10 @@ class Logger {
     let logMessage;
     logMessage =
       messages.length !== 1
-        ? JSON.stringify(messages)
+        ? JSON.stringify(messages, null, 2)
         : typeof messages[0] === 'string'
         ? messages[0]
-        : JSON.stringify(messages[0]);
+        : JSON.stringify(messages[0], null, 2);
     defaultLogger.log(level, logMessage);
   }
 
