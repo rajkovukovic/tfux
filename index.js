@@ -7,6 +7,7 @@ const path = require('path');
 const { installGlobally } = require('./utils/install/install-globally.js');
 const { uninstallDep } = require('./utils/uninstall/uninstall.js');
 const { initProject } = require('./utils/init-project/init-project.js');
+const { PACKAGE_JSON } = require('./utils/constants/constants.js');
 
 const install = function (value, options) {
   if (value.length < 1) fatal('Please provide at least one dependency name!');
@@ -41,7 +42,7 @@ function print_error(msg) {
 }
 
 program
-  .version('0.1.0')
+  .version(PACKAGE_JSON.version)
   .command('install')
   .alias('i')
   .description('Install package and prepare to upload')

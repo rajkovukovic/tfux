@@ -1,8 +1,11 @@
 'use strict';
+
+const path = require('path');
+
 const { FIREX_LIB_PATH, GROUP_SEPARATOR, VERSION_SEPARATOR } = require('../constants/constants.js');
 const { getGroupAndArt, getPom } = require('../versions/versions');
 const { parseJspmJSONDependency } = require('../engines/jspm/tools/parse-jspm.js');
-const path = require('path');
+const { logger } = require('../logger/logger.js');
 
 /**
  *
@@ -49,7 +52,7 @@ function returnPomXml(dependency) {
           Object.values(requiresMap)
         );
       } else {
-        console.error(error);
+        logger.error(error);
       }
     }
   } else {

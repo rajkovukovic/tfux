@@ -4,6 +4,7 @@ const path = require('path');
 const childProcess = require('child_process');
 const { JSPM_BIN_PATH } = require('../../../constants/constants.js');
 const { parseJspmJSONDependency } = require('../tools/parse-jspm.js');
+const { logger } = require('../../../logger/logger.js');
 
 function jspmFormatDependencies(dependencyMap) {
   return Object.entries(dependencyMap)
@@ -36,8 +37,8 @@ function installPeerDependenciesIfAny(engine, moduleJspmName, checkedDependencie
       // const parentName = parseJspmJSONDependency(moduleJspmName)[1];
       peerDependencies.forEach((peerDep) => {
         const peerDepName = parseJspmJSONDependency(peerDep)[1];
-        console.log({ moduleJspmName });
-        console.log(
+        logger.info({ moduleJspmName });
+        logger.info(
           `\n\n\nWriting: jspmJSON.dependencies.${moduleJspmName}.resolve.${peerDepName} = jspmJSON.resolve.${peerDepName} (${jspmJSON.resolve[peerDepName]})\n\n\n`
         );
         jspmJSON.dependencies[moduleJspmName].resolve[peerDepName] = jspmJSON.resolve[peerDepName];
@@ -52,7 +53,7 @@ function installPeerDependenciesIfAny(engine, moduleJspmName, checkedDependencie
         JSON.stringify(jspmFormatDependencies(moduleJspmInfo.resolve))
       );
 
-      console.log({
+      logger.info({
         transitive: true,
         moduleJspmName,
         transitiveDeps,
@@ -60,7 +61,7 @@ function installPeerDependenciesIfAny(engine, moduleJspmName, checkedDependencie
       });
 
       transitiveDeps.forEach((name) => {
-        console.log({ transitiveDeps, name });
+        logger.info({ transitiveDeps, name });
         installPeerDependenciesIfAny(engine, name, checkedDependencies);
       });
     }
@@ -84,7 +85,7 @@ function installDependenciesWithPeer(
 
   if (installTransitiveDependencies) {
     const modules = jspmFormatDependencies(engine.jspmJSON.resolve);
-    console.log({ modules });
+    logger.info({ modules });
 
     modules.forEach((name) => {
       installPeerDependenciesIfAny(engine, name, checkedDependencies);

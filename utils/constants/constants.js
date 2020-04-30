@@ -4,12 +4,13 @@ const os = require('os');
 const path = require('path');
 const untildify = require('untildify');
 
-const { name: CLI_TOOL_NAME } = require('../../package.json');
-const JSPM_BIN_PATH = path.join(
-  require.main.filename.substring(0, require.main.filename.lastIndexOf('/')),
-  'node_modules/jspm',
-  'bin/jspm'
+const PACKAGE_JSON = require('../../package.json');
+const CLI_TOOL_NAME = PACKAGE_JSON.name;
+const NODE_MODULES_PATH = path.join(
+  require.resolve('jspm').split('/node_modules/')[0],
+  'node_modules'
 );
+const JSPM_BIN_PATH = path.join(NODE_MODULES_PATH, 'jspm/bin/jspm');
 const CWD = process.cwd();
 const TMP_DIR = path.resolve(untildify(path.join(os.tmpdir(), 'firex')));
 const FIREX_PATH_ENV = process.env.FIREX_PATH;
@@ -38,6 +39,7 @@ const PROJECT_TEMPLATE_OPTIONS = {
   vue: 'vue',
 };
 
+exports.PACKAGE_JSON = PACKAGE_JSON;
 exports.CLI_TOOL_NAME = CLI_TOOL_NAME;
 exports.JSPM_BIN_PATH = JSPM_BIN_PATH;
 exports.CWD = CWD;

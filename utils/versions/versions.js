@@ -1,7 +1,7 @@
 'use strict';
-const Constants = require('../constants/constants.js');
-
 const semver = require('semver');
+const { logger } = require('../logger/logger.js');
+const Constants = require('../constants/constants.js');
 
 /**
  *
@@ -119,7 +119,7 @@ function getPomRange(range, resolved) {
     minMax.max = range;
     return minMax;
   } catch (err) {
-    console.log(err, range);
+    logger.info(err, range);
   }
   return minMax;
 }

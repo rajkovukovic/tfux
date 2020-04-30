@@ -17,6 +17,7 @@ const {
 } = require('../../constants/constants.js');
 const { getGroupAndArt } = require('../../versions/versions');
 const { parseJspmJSONDependency } = require('../jspm/tools/parse-jspm.js');
+const { logger } = require('../../logger/logger.js');
 const M2_DEFAULT = '~/.m2';
 const MVN_SETTINGS_DEFAULT = 'settings.xml';
 
@@ -30,7 +31,7 @@ async function checkMvnInstalled() {
     const child = childProcess.execSync(`mvn -v`);
     return Buffer.isBuffer(child) ? child.toString() : child;
   } catch (error) {
-    // console.log(error);
+    // logger.info(error);
     return null;
   }
 }
@@ -52,7 +53,7 @@ function getMvnRepositoryPath() {
     const xmlSettings = fs.readFileSync(settingsPath, 'utf-8').toString();
 
     parser.parseString(xmlSettings, function (err, result) {
-      if (err) console.log("Can't find settings.xml!");
+      if (err) logger.info("Can't find settings.xml!");
       result =
         result.settings && result.settings.localRepository
           ? result.settings.localRepository
@@ -85,7 +86,7 @@ function zipAndCopyToRepo(name, options) {
         'repository',
         `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`
       );
-  console.log({ pathToRepo });
+  logger.info({ pathToRepo });
   // create repo
   createDirPath(pathToRepo);
   // Copy pom.xml
@@ -127,12 +128,12 @@ function zipFolder(sourcePath, pathToZip) {
   });
 
   output.on('close', function () {
-    console.log(archive.pointer() + ' total bytes');
-    console.log('archiver has been finalized and the output file descriptor has closed.');
+    logger.info(archive.pointer() + ' total bytes');
+    logger.info('archiver has been finalized and the output file descriptor has closed.');
   });
 
   output.on('end', function () {
-    console.log('Data has been drained');
+    logger.info('Data has been drained');
   });
 
   archive.on('warning', function (err) {
@@ -159,12 +160,12 @@ function minZipFolder(sourcePath, pathToZip, zipRoot) {
   });
 
   output.on('close', function () {
-    console.log(archive.pointer() + ' total bytes');
-    console.log('archiver has been finalized and the output file descriptor has closed.');
+    logger.info(archive.pointer() + ' total bytes');
+    logger.info('archiver has been finalized and the output file descriptor has closed.');
   });
 
   output.on('end', function () {
-    console.log('Data has been drained');
+    logger.info('Data has been drained');
   });
 
   archive.on('warning', function (err) {
@@ -189,7 +190,7 @@ function minZipFolder(sourcePath, pathToZip, zipRoot) {
       const min = minify(f.fullName);
       if (min.error) {
         // uglify error
-        console.error({ file: f.fullName, error: min.error.message });
+        logger.error({ file: f.fullName, error: min.error.message });
         archive.file(f.fullName, { name: f.fullName.split(zipRoot).pop() });
       } else {
         // if (min.warnings) console.warn({ file: f.fullName, warn: min.warnings });
@@ -239,7 +240,7 @@ const minify = function (file) {
     const codeString = fs.readFileSync(untildify(file), 'utf-8').toString();
     return UglifyES.minify(codeString, options);
   } catch (error) {
-    console.error('\x1b[31m', 'minify file ' + file, error);
+    logger.error('minify file ' + file, error);
   }
 };
 
