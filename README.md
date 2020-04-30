@@ -1,22 +1,22 @@
-# vatra
+# firex
 
-**Vatra** is CLI tool used to install ES6 modules and set up Tribefire javascript artifacts (projects)
+**firex** is CLI tool used to install ES6 modules and set up Tribefire javascript artifacts (projects)
 
-**Vatra** converting js modules from node format to tribefire ES6, upload and synchronize them with Tribefire repository
+**firex** converting js modules from node format to tribefire ES6, upload and synchronize them with Tribefire repository
 
 ## Install
 
-`npm install vatra -g`
+`npm install @tribefire/firex -g`
 
 ## Prerequisites
 
-To work with **vatra**, ensure that you have the following:
+To work with **firex**, ensure that you have the following:
 
 - The Jinni Package -> [jinni](https://documentation.tribefire.com/tribefire.cortex.documentation/development-environment-doc/quick_installation_devops.html#jinni)
 
 ## Command line usage
 
-`vatra [options] [command]`
+`firex [options] [command]`
 
 ```
 Options:
@@ -26,8 +26,8 @@ Options:
 Commands:
   install|i [options] [name...]     Install package and prepare to upload
   uninstall|u [options] [names...]  Uninstall packages
-  create [options] <name>           Create vatra project
-  init [options]                    Initialize vatra project
+  create [options] <name>           Create firex project
+  init [options]                    Initialize firex project
   help [command]                    display help for command
 ```
 
@@ -35,7 +35,7 @@ Commands:
 
 To create a new project, run:
 
-`vatra create hello-word`
+`firex create hello-word`
 
 hello-word jsx project will be created in hello-world folder.
 
@@ -44,12 +44,12 @@ To install dependencies for project use -d option and provide comma separated li
 
 You can explore all options by running:
 
-`vatra help create`
+`firex help create`
 
 ```
-Usage: vatra create [options] <name>
+Usage: firex create [options] <name>
 
-Create vatra project
+Create firex project
 
 Options:
   -d, --deps [name]  Install dependencies (comma separated names) (default: [])
@@ -63,12 +63,12 @@ Options:
 
 ### Initialize a Project
 
-To initialize **vatra** project in existing folder, use init command. All options are the same as for create command:
+To initialize **firex** project in existing folder, use init command. All options are the same as for create command:
 
 ```
-Usage: vatra init [options]
+Usage: firex init [options]
 
-Initialize vatra project
+Initialize firex project
 
 Options:
   -d, --deps <name>  Install dependencies (comma separated names) (default: [])
@@ -84,10 +84,10 @@ Options:
 
 Use install command to add dependencies to project. Eg.:
 
-`vatra install libName1 libName2 libName3`
+`firex install libName1 libName2 libName3`
 
 ```
-Usage: vatra install|i [options] [name...]
+Usage: firex install|i [options] [name...]
 
 Install package and prepare to upload
 
@@ -98,16 +98,16 @@ Options:
   -h, --help             display help for command
 ```
 
-**Vatra** use `~/.vatra/lib` for libraries installed with -g options, and `~/.vatra/repository` as temporary jinni repository. You can use --zip-path option to provide different jinni repository path. If you want to prepare repository in maven format, provide path with --mvn option.
+**firex** use `~/.firex/lib` for libraries installed with -g options, and `~/.firex/repository` as temporary jinni repository. You can use --zip-path option to provide different jinni repository path. If you want to prepare repository in maven format, provide path with --mvn option.
 
 ## Uninstall dependencies
 
 Use uninstall command to remove dependencies from project. Eg.:
 
-`vatra uninstall libName1 libName2 libName3`
+`firex uninstall libName1 libName2 libName3`
 
 ```
-Usage: vatra uninstall|u [options] [names...]
+Usage: firex uninstall|u [options] [names...]
 
 Uninstall packages
 

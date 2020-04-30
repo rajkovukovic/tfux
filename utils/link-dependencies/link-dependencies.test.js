@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 
-const { VATRA_LIB_NAME, VATRA_LIB_PATH } = require('../constants/constants.js');
+const { FIREX_LIB_NAME, FIREX_LIB_PATH } = require('../constants/constants.js');
 const { linkDependencies } = require('./link-dependencies.js');
 
 let fakeExistsSync = sinon.fake.returns(true);
@@ -84,7 +84,7 @@ describe('generateModuleName()', function () {
   const destinationPath = '/';
   const sourceFiles = ['js.lodash-4.0.0', 'js.rxjs-5.0.0'];
   const destinationFiles = ['js.lodash-4.0', 'js.rxjs-5.0'];
-  const destinationLibPath = path.join(destinationPath, VATRA_LIB_NAME);
+  const destinationLibPath = path.join(destinationPath, FIREX_LIB_NAME);
 
   it(`should create destination lib folder`, function () {
     linkDependencies(destinationPath, sourceFiles);
@@ -94,7 +94,7 @@ describe('generateModuleName()', function () {
   it(`should create symlinks`, function () {
     linkDependencies(destinationPath, sourceFiles);
     assert.deepEqual(
-      checkSymLinks(VATRA_LIB_PATH, sourceFiles, destinationLibPath, destinationFiles),
+      checkSymLinks(FIREX_LIB_PATH, sourceFiles, destinationLibPath, destinationFiles),
       true
     );
   });

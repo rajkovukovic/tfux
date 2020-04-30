@@ -61,7 +61,7 @@ program
 
 program
   .command('create')
-  .description('Create vatra project')
+  .description('Create firex project')
   .arguments('<name>')
   .option('-d, --deps [name]', 'Install dependencies (comma separated names)', collect, [])
   .option('-e --editor', 'Open editor')
@@ -73,7 +73,7 @@ program
 
 program
   .command('init')
-  .description('Initialize vatra project')
+  .description('Initialize firex project')
   .option('-d, --deps <name>', 'Install dependencies (comma separated names)', collect, [])
   .option('-e --editor', 'Open editor')
   .option('-j --jsx', 'Create jsx project.')

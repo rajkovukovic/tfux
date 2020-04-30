@@ -3,7 +3,7 @@
 const {
   CLI_TOOL_NAME,
   ENGINE_TYPES,
-  VATRA_LIB_PATH,
+  FIREX_LIB_PATH,
   TMP_DIR,
 } = require('../constants/constants.js');
 const { JspmEngine } = require('../engines/jspm/jspm.js');
@@ -15,7 +15,7 @@ const engineFactories = {
 };
 
 async function uninstallDep(dependencyOrDependencies, options, engineName = ENGINE_TYPES.jspm) {
-  console.log({ VATRA_LIB_PATH, TMP_DIR });
+  console.log({ FIREX_LIB_PATH, TMP_DIR });
   if (!engineName || !engineFactories[engineName])
     throw new Error(
       `engineName is must be one of ${JSON.stringify(
@@ -27,7 +27,7 @@ async function uninstallDep(dependencyOrDependencies, options, engineName = ENGI
     ? dependencyOrDependencies
     : [dependencyOrDependencies];
 
-  const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR, options);
+  const engine = new engineFactories[engineName](FIREX_LIB_PATH, TMP_DIR, options);
 
   console.log(`${CLI_TOOL_NAME} is uninstalling ${JSON.stringify(dependencyArray)}`);
 
