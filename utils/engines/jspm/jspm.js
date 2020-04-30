@@ -23,7 +23,7 @@ class JspmEngine extends AbstractEngine {
 
   async installDependencies(dependencies, installTransitiveDependencies = true) {
     installDependenciesWithPeer(this, dependencies, installTransitiveDependencies, new Set());
-    // make dependencies vatra compatible and copy them to the global vatra lib
+    // make dependencies firex compatible and copy them to the global firex lib
     return await this.transformAndCopyModules();
   }
 

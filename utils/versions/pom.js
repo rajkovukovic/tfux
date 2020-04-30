@@ -1,9 +1,11 @@
 'use strict';
+
 const path = require('path');
-const { VATRA_LIB_PATH, GROUP_SEPARATOR, VERSION_SEPARATOR } = require('../constants/constants.js');
-const { logger } = require('../logger/logger.js');
+
+const { FIREX_LIB_PATH, GROUP_SEPARATOR, VERSION_SEPARATOR } = require('../constants/constants.js');
 const { getGroupAndArt, getPom } = require('../versions/versions');
 const { parseJspmJSONDependency } = require('../engines/jspm/tools/parse-jspm.js');
+const { logger } = require('../logger/logger.js');
 
 /**
  *
@@ -18,7 +20,7 @@ function returnPomXml(dependency) {
     // get package.json
     try {
       const pack = require(path.join(
-        VATRA_LIB_PATH,
+        FIREX_LIB_PATH,
         `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`,
         'package.json'
       ));
@@ -36,7 +38,7 @@ function returnPomXml(dependency) {
       );
     } catch (error) {
       if (error.code == 'MODULE_NOT_FOUND') {
-        logger.info('package.json not found. Pom will be generated with resolved versions!!!');
+        console.log('package.json not found. Pom will be generated with resolved versions!!!');
         let requiresMap = {};
         Object.entries(dep[1].resolve).forEach((d) => {
           requiresMap[d[0]] = {

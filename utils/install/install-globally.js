@@ -3,7 +3,7 @@
 const {
   CLI_TOOL_NAME,
   ENGINE_TYPES,
-  VATRA_LIB_PATH,
+  FIREX_LIB_PATH,
   TMP_DIR,
 } = require('../constants/constants.js');
 const { JspmEngine } = require('../engines/jspm/jspm.js');
@@ -16,9 +16,16 @@ const engineFactories = {
 };
 
 async function installGlobally(dependencyOrDependencies, options, engineName = ENGINE_TYPES.jspm) {
-  logger.info({ VATRA_LIB_PATH, TMP_DIR });
+  logger.info({ FIREX_LIB_PATH, TMP_DIR });
 
   try {
+    if (!engineName || !engineFactories[engineName])
+      throw new Error(
+        `engineName is must be one of ${JSON.stringify(
+          Object.keys(engineFactories)
+        )}\nGot engineName="${engineName}"`
+      );
+
     if (!engineName || !engineFactories[engineName])
       throw new Error(
         `engineName is must be one of ${JSON.stringify(
@@ -30,7 +37,7 @@ async function installGlobally(dependencyOrDependencies, options, engineName = E
       ? dependencyOrDependencies
       : [dependencyOrDependencies];
 
-    const engine = new engineFactories[engineName](VATRA_LIB_PATH, TMP_DIR, options);
+    const engine = new engineFactories[engineName](FIREX_LIB_PATH, TMP_DIR, options);
 
     logger.info(`${CLI_TOOL_NAME} is installing ${JSON.stringify(dependencyArray)}`);
     // install dependency to TMP folder

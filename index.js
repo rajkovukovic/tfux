@@ -5,11 +5,18 @@ const program = require('commander');
 const path = require('path');
 
 const { installGlobally } = require('./utils/install/install-globally.js');
+const { uninstallDep } = require('./utils/uninstall/uninstall.js');
 const { initProject } = require('./utils/init-project/init-project.js');
 const { PACKAGE_JSON } = require('./utils/constants/constants.js');
 
 const install = function (value, options) {
+  if (value.length < 1) fatal('Please provide at least one dependency name!');
   installGlobally(value, options); // send options.args - to install all
+};
+
+const uninstall = function (value, options) {
+  if (value.length < 1) fatal('Please provide at least one dependency name!');
+  uninstallDep(value, options); // send options.args - to install all
 };
 
 const create = function (value, options) {
@@ -24,6 +31,16 @@ function collect(value, previous) {
   return previous.concat(value.split(','));
 }
 
+function fatal(msg) {
+  print_error(msg);
+  process.exit(1);
+}
+
+function print_error(msg) {
+  process.stderr.write(msg);
+  process.stderr.write('\n');
+}
+
 program
   .version(PACKAGE_JSON.version)
   .command('install')
@@ -36,8 +53,16 @@ program
   .action(install);
 
 program
+  .command('uninstall')
+  .alias('u')
+  .description('Uninstall packages')
+  .arguments('[names...]')
+  .option('-pom  --pom-path <dir>', "Path to folder with pom.xml file. Default '.'")
+  .action(uninstall);
+
+program
   .command('create')
-  .description('Create vatra project')
+  .description('Create firex project')
   .arguments('<name>')
   .option('-d, --deps [name]', 'Install dependencies (comma separated names)', collect, [])
   .option('-e --editor', 'Open editor')
@@ -49,7 +74,7 @@ program
 
 program
   .command('init')
-  .description('Initialize vatra project')
+  .description('Initialize firex project')
   .option('-d, --deps <name>', 'Install dependencies (comma separated names)', collect, [])
   .option('-e --editor', 'Open editor')
   .option('-j --jsx', 'Create jsx project.')

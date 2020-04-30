@@ -4,11 +4,10 @@ const path = require('path');
 const childProcess = require('child_process');
 const { JSPM_BIN_PATH } = require('../../../constants/constants.js');
 const { parseJspmJSONDependency } = require('../tools/parse-jspm.js');
-const { logger } = require('../../../logger/logger.js');
 
 function jspmFormatDependencies(dependencyMap) {
   return Object.entries(dependencyMap)
-    .filter(([moduleName]) => moduleName !== '@jspm/core')
+    .filter(([moduleName, _]) => moduleName !== '@jspm/core')
     .map(([_, moduleJspmName]) => moduleJspmName);
 }
 
@@ -20,7 +19,7 @@ function packageJsonFormatDependencies(dependencyMap) {
 
 function installPeerDependenciesIfAny(engine, moduleJspmName, checkedDependencies) {
   if (!checkedDependencies.has(moduleJspmName)) {
-    logger.info('installPeerDependenciesIfAny', moduleJspmName);
+    console.log('installPeerDependenciesIfAny', moduleJspmName);
     checkedDependencies.add(moduleJspmName);
 
     const packageJson = require(path.join(
@@ -93,4 +92,5 @@ function installDependenciesWithPeer(
   }
 }
 
+exports.jspmFormatDependencies = jspmFormatDependencies;
 exports.installDependenciesWithPeer = installDependenciesWithPeer;

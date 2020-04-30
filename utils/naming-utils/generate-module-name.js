@@ -42,6 +42,9 @@ function generateModuleName(groupName, moduleName, version) {
  * @param {ModuleInfo} moduleInfo
  */
 function moduleInfoToFolderName(moduleInfo) {
+  if (typeof moduleInfo !== 'object' || moduleInfo === null) {
+    throw new Error('moduleInfo must be an Object');
+  }
   return generateModuleName(moduleInfo.group, moduleInfo.name, moduleInfo.version);
 }
 

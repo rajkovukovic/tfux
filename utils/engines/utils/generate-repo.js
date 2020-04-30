@@ -6,14 +6,14 @@ const path = require('path');
 const childProcess = require('child_process');
 const untildify = require('untildify');
 const mkdirp = require('mkdirp');
-const config = require('../../../vatra.config.json');
+const config = require('../../../firex.config.json');
 const xml2js = require('xml2js');
 const UglifyES = require('terser');
 const {
   GROUP_SEPARATOR,
   VERSION_SEPARATOR,
-  VATRA_LIB_PATH,
-  VATRA_PATH,
+  FIREX_LIB_PATH,
+  FIREX_PATH,
 } = require('../../constants/constants.js');
 const { getGroupAndArt } = require('../../versions/versions');
 const { parseJspmJSONDependency } = require('../jspm/tools/parse-jspm.js');
@@ -82,7 +82,7 @@ function zipAndCopyToRepo(name, options) {
     : options.mvn
     ? getMvnPath(versionDep, depVersionParts, options.mvn)
     : path.join(
-        VATRA_PATH,
+        FIREX_PATH,
         'repository',
         `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`
       );
@@ -91,7 +91,7 @@ function zipAndCopyToRepo(name, options) {
   createDirPath(pathToRepo);
   // Copy pom.xml
   const sourcePath = path.join(
-    VATRA_LIB_PATH,
+    FIREX_LIB_PATH,
     `${versionDep.group}${GROUP_SEPARATOR}${versionDep.artifact}${VERSION_SEPARATOR}${depVersionParts[2]}`
   );
   // pom name lib-version.pom

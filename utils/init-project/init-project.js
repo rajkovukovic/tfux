@@ -53,7 +53,7 @@ async function initProject(destinationPath, { deps: dependencies, editor, ...res
       .filter((option) => Boolean(restOptions[option]))
       .join('-');
     concatenatedOptions = concatenatedOptions || 'js';
-    const templatePath = path.join(VATRA_TEMPLATES_PATH, concatenatedOptions);
+    const templatePath = path.join(FIREX_TEMPLATES_PATH, concatenatedOptions);
 
     // copy project template files to destination dir
     if (fs.existsSync(templatePath)) {

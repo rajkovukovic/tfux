@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
-const { VATRA_LIB_NAME, VATRA_LIB_PATH } = require('../constants/constants.js');
+const { FIREX_LIB_NAME, FIREX_LIB_PATH } = require('../constants/constants.js');
 
 /**
  *
@@ -11,7 +11,7 @@ const { VATRA_LIB_NAME, VATRA_LIB_PATH } = require('../constants/constants.js');
  * @param {string[]} dependencies
  */
 function linkDependencies(destinationPath, dependencies) {
-  const destinationLibPath = path.join(destinationPath, VATRA_LIB_NAME);
+  const destinationLibPath = path.join(destinationPath, FIREX_LIB_NAME);
   if (!fs.existsSync(destinationLibPath)) {
     mkdirp.sync(destinationLibPath);
   }
@@ -20,7 +20,7 @@ function linkDependencies(destinationPath, dependencies) {
   }
   dependencies.forEach((dependencyDirName) =>
     fs.symlinkSync(
-      path.join(VATRA_LIB_PATH, dependencyDirName),
+      path.join(FIREX_LIB_PATH, dependencyDirName),
       path.join(destinationLibPath, dependencyDirName.split('.').slice(0, -1).join('.'))
     )
   );
