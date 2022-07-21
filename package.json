@@ -33,7 +33,7 @@
     "rollup-plugin-hashbang": "^2.2.2",
     "rollup-plugin-typescript2": "^0.26.0",
     "sinon": "^9.0.2",
-    "terser": "^4.6.12",
+    "terser": "^4.8.1",
     "typescript": "^3.8.3",
     "untildify": "^4.0.0",
     "winston": "^3.2.1",
